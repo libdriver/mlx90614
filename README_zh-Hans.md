@@ -1,10 +1,12 @@
+[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
+
 <div align=center>
 <img src="/doc/image/logo.png"/>
 </div>
 
 ## LibDriver MLX90614 
 
-[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
+[![API](https://img.shields.io/badge/api-reference-blue)](https://www.libdriver.com/docs/mlx90614/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
 
 迈来芯 MLX90614 是一款用于非接触式温度测量的红外温度计。IR 敏感型热电堆检测器芯片和信号调节 ASIC 都集成在同一 TO-39 罐封装中。MLX90614 集成有低噪声放大器、17 位 ADC 和强大的 DSP 单元，因此温度计兼具高精度和高分辨率。该温度计出厂前已经过校准，可通过数字 SMBus 输出提供整个温度范围内的测量温度（分辨率为 0.02°C）。用户可以将数字输出配置为脉宽调制 (PWM)。标准情况下，将 10 位 PWM 配置为以 0.14°C 的分辨率连续传输介于 -20 和 120°C 之间的测量温度。
 
