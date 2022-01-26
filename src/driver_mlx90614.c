@@ -1554,6 +1554,12 @@ uint8_t mlx90614_init(mlx90614_handle_t *handle)
         
         return 3;                                                    /* return error */
     }
+    if (handle->iic_deinit == NULL)                                  /* check iic_deinit */
+    {
+        handle->debug_print("mlx90614: iic_deinit is null.\n");      /* iic_deinit is null */
+        
+        return 3;                                                    /* return error */
+    }
     if (handle->iic_read == NULL)                                    /* check iic_read */
     {
         handle->debug_print("mlx90614: iic_read is null.\n");        /* iic_read is null */
