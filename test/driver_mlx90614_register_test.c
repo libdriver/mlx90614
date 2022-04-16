@@ -48,12 +48,12 @@ static mlx90614_handle_t gs_handle;        /**< mlx90614 handle */
  */
 uint8_t mlx90614_register_test(void)
 {
-    volatile uint8_t res;
-    volatile uint8_t addr, addr_check;
-    volatile uint16_t value, value_check;
-    volatile double s, s_check;
-    volatile uint16_t id[4];
-    volatile uint16_t flag;
+    uint8_t res;
+    uint8_t addr, addr_check;
+    uint16_t value, value_check;
+    double s, s_check;
+    uint16_t id[4];
+    uint16_t flag;
     mlx90614_fir_length_t len;
     mlx90614_iir_t iir;
     mlx90614_mode_t mode;
@@ -77,7 +77,7 @@ uint8_t mlx90614_register_test(void)
     
     /* get information */
     res = mlx90614_info(&info);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get info failed.\n");
        
@@ -108,7 +108,7 @@ uint8_t mlx90614_register_test(void)
     
     /* set the addr */
     res = mlx90614_set_addr(&gs_handle, addr);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set addr failed.\n");
         
@@ -118,7 +118,7 @@ uint8_t mlx90614_register_test(void)
     
     /* get the addr */
     res = mlx90614_get_addr(&gs_handle, (uint8_t *)&addr_check);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get addr failed.\n");
         
@@ -128,7 +128,7 @@ uint8_t mlx90614_register_test(void)
     
     /* set address */
     res = mlx90614_set_addr(&gs_handle, MLX90614_ADDRESS_DEFAULT);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set addr failed.\n");
         
@@ -137,7 +137,7 @@ uint8_t mlx90614_register_test(void)
     
     /* mlx90614 init */
     res = mlx90614_init(&gs_handle);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: init failed.\n");
         
@@ -146,18 +146,20 @@ uint8_t mlx90614_register_test(void)
     
     /* pwm to smbus */
     res = mlx90614_pwm_to_smbus(&gs_handle);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: pwm to smbus failed.\n");
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     
     /* exit sleep mode */
     res = mlx90614_exit_sleep_mode(&gs_handle);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: exit sleep mode failed.\n");
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -167,19 +169,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set fir length 8 */
     res = mlx90614_set_fir_length(&gs_handle, MLX90614_FIR_LENGTH_8);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set fir length failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set fir length 8.\n");
     res = mlx90614_get_fir_length(&gs_handle, &len);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get fir length failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -187,19 +189,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set fir length 16 */
     res = mlx90614_set_fir_length(&gs_handle, MLX90614_FIR_LENGTH_16);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set fir length failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set fir length 16.\n");
     res = mlx90614_get_fir_length(&gs_handle, &len);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get fir length failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -207,19 +209,19 @@ uint8_t mlx90614_register_test(void)
 
     /* set fir length 32 */
     res = mlx90614_set_fir_length(&gs_handle, MLX90614_FIR_LENGTH_32);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set fir length failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set fir length 32.\n");
     res = mlx90614_get_fir_length(&gs_handle, &len);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get fir length failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -227,19 +229,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set fir length 64 */
     res = mlx90614_set_fir_length(&gs_handle, MLX90614_FIR_LENGTH_64);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set fir length failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set fir length 64.\n");
     res = mlx90614_get_fir_length(&gs_handle, &len);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get fir length failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -247,19 +249,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set fir length 128 */
     res = mlx90614_set_fir_length(&gs_handle, MLX90614_FIR_LENGTH_128);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set fir length failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set fir length 128.\n");
     res = mlx90614_get_fir_length(&gs_handle, &len);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get fir length failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -267,19 +269,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set fir length 256 */
     res = mlx90614_set_fir_length(&gs_handle, MLX90614_FIR_LENGTH_256);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set fir length failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set fir length 256.\n");
     res = mlx90614_get_fir_length(&gs_handle, &len);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get fir length failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -287,19 +289,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set fir length 512 */
     res = mlx90614_set_fir_length(&gs_handle, MLX90614_FIR_LENGTH_512);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set fir length failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set fir length 512.\n");
     res = mlx90614_get_fir_length(&gs_handle, &len);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get fir length failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -307,19 +309,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set fir length 1024 */
     res = mlx90614_set_fir_length(&gs_handle, MLX90614_FIR_LENGTH_1024);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set fir length failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set fir length 1024.\n");
     res = mlx90614_get_fir_length(&gs_handle, &len);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get fir length failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -330,19 +332,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set iir a1 0.5 b1 0.5 */
     res = mlx90614_set_iir(&gs_handle, MLX90614_IIR_A1_0P5_B1_0P5);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set iir failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set iir a1 0.5 b1 0.5.\n");
     res = mlx90614_get_iir(&gs_handle, &iir);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get iir failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -350,19 +352,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set iir a1 0.25 b1 0.75 */
     res = mlx90614_set_iir(&gs_handle, MLX90614_IIR_A1_0P25_B1_0P75);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set iir failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set iir a1 0.25 b1 0.75.\n");
     res = mlx90614_get_iir(&gs_handle, &iir);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get iir failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -370,19 +372,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set iir a1 0.166 b1 0.83 */
     res = mlx90614_set_iir(&gs_handle, MLX90614_IIR_A1_0P166_B1_0P83);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set iir failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set iir a1 0.166 b1 0.83.\n");
     res = mlx90614_get_iir(&gs_handle, &iir);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get iir failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -390,19 +392,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set iir a1 0.125 b1 0.875 */
     res = mlx90614_set_iir(&gs_handle, MLX90614_IIR_A1_0P125_B1_0P875);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set iir failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set iir a1 0.125 b1 0.875.\n");
     res = mlx90614_get_iir(&gs_handle, &iir);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get iir failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -410,19 +412,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set iir a1 1 b1 0 */
     res = mlx90614_set_iir(&gs_handle, MLX90614_IIR_A1_1_B1_0);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set iir failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set iir a1 1 b1 0.\n");
     res = mlx90614_get_iir(&gs_handle, &iir);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get iir failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -430,19 +432,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set iir a1 0.8 b1 0.2 */
     res = mlx90614_set_iir(&gs_handle, MLX90614_IIR_A1_0P8_B1_0P2);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set iir failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set iir a1 0.8 b1 0.2.\n");
     res = mlx90614_get_iir(&gs_handle, &iir);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get iir failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -450,19 +452,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set iir a1 0.666 b1 0.333 */
     res = mlx90614_set_iir(&gs_handle, MLX90614_IIR_A1_0P666_B1_0P333);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set iir failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set iir a1 0.666 b1 0.333.\n");
     res = mlx90614_get_iir(&gs_handle, &iir);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get iir failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -470,19 +472,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set iir a1 0.571 b1 0.428 */
     res = mlx90614_set_iir(&gs_handle, MLX90614_IIR_A1_0P571_B1_0P428);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set iir failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set iir a1 0.571 b1 0.428.\n");
     res = mlx90614_get_iir(&gs_handle, &iir);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get iir failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -493,19 +495,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set ta tobj1 mode */
     res = mlx90614_set_mode(&gs_handle, MLX90614_MODE_TA_TOBJ1);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set mode failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set ta tobj1 mode.\n");
     res = mlx90614_get_mode(&gs_handle, &mode);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get mode failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -513,19 +515,19 @@ uint8_t mlx90614_register_test(void)
 
     /* set ta tobj2 mode */
     res = mlx90614_set_mode(&gs_handle, MLX90614_MODE_TA_TOBJ2);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set mode failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set ta tobj2 mode.\n");
     res = mlx90614_get_mode(&gs_handle, &mode);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get mode failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -533,19 +535,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set tobj2 mode */
     res = mlx90614_set_mode(&gs_handle, MLX90614_MODE_TOBJ2);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set mode failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set tobj2 mode.\n");
     res = mlx90614_get_mode(&gs_handle, &mode);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get mode failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -553,19 +555,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set tobj1 tobj2 mode */
     res = mlx90614_set_mode(&gs_handle, MLX90614_MODE_TOBJ1_TOBJ2);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set mode failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set tobj1 tobj2 mode.\n");
     res = mlx90614_get_mode(&gs_handle, &mode);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get mode failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -576,19 +578,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set ir sensor single */
     res = mlx90614_set_ir_sensor(&gs_handle, MLX90614_IR_SENSOR_SINGLE);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set ir sensor failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set ir sensor single.\n");
     res = mlx90614_get_ir_sensor(&gs_handle, &sensor);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get ir sensor failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -596,19 +598,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set ir sensor dual */
     res = mlx90614_set_ir_sensor(&gs_handle, MLX90614_IR_SENSOR_DUAL);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set ir sensor failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set ir sensor dual.\n");
     res = mlx90614_get_ir_sensor(&gs_handle, &sensor);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get ir sensor failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -619,19 +621,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set ks positive */
     res = mlx90614_set_ks(&gs_handle, MLX90614_KS_POSITIVE);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set ks failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set ks positive.\n");
     res = mlx90614_get_ks(&gs_handle, &ks);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get ks failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -639,19 +641,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set ks negative */
     res = mlx90614_set_ks(&gs_handle, MLX90614_KS_NEGATIVE);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set ks failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set ks negative.\n");
     res = mlx90614_get_ks(&gs_handle, &ks);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get ks failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -662,19 +664,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set kt2 positive */
     res = mlx90614_set_kt2(&gs_handle, MLX90614_KT2_POSITIVE);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set kt2 failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set kt2 positive.\n");
     res = mlx90614_get_kt2(&gs_handle, &kt2);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get kt2 failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -682,19 +684,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set kt2 negative */
     res = mlx90614_set_kt2(&gs_handle, MLX90614_KT2_NEGATIVE);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set kt2 failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set kt2 negative.\n");
     res = mlx90614_get_kt2(&gs_handle, &kt2);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get kt2 failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -705,19 +707,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set gain 1 */
     res = mlx90614_set_gain(&gs_handle, MLX90614_GAIN_1);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set gain failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set gain 1.\n");
     res = mlx90614_get_gain(&gs_handle, &gain);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get gain failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -725,19 +727,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set gain 3 */
     res = mlx90614_set_gain(&gs_handle, MLX90614_GAIN_3);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set gain failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set gain 3.\n");
     res = mlx90614_get_gain(&gs_handle, &gain);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get gain failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -745,19 +747,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set gain 6 */
     res = mlx90614_set_gain(&gs_handle, MLX90614_GAIN_6);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set gain failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set gain 6.\n");
     res = mlx90614_get_gain(&gs_handle, &gain);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get gain failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -765,19 +767,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set gain 12.5 */
     res = mlx90614_set_gain(&gs_handle, MLX90614_GAIN_12P5);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set gain failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set gain 12.5.\n");
     res = mlx90614_get_gain(&gs_handle, &gain);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get gain failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -785,19 +787,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set gain 25 */
     res = mlx90614_set_gain(&gs_handle, MLX90614_GAIN_25);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set gain failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set gain 25.\n");
     res = mlx90614_get_gain(&gs_handle, &gain);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get gain failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -805,19 +807,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set gain 50 */
     res = mlx90614_set_gain(&gs_handle, MLX90614_GAIN_50);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set gain failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set gain 50.\n");
     res = mlx90614_get_gain(&gs_handle, &gain);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get gain failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -825,19 +827,19 @@ uint8_t mlx90614_register_test(void)
     
     /* set gain 100 */
     res = mlx90614_set_gain(&gs_handle, MLX90614_GAIN_100);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set gain failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set gain 100.\n");
     res = mlx90614_get_gain(&gs_handle, &gain);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get gain failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -848,19 +850,19 @@ uint8_t mlx90614_register_test(void)
     
     /* enable sensor test */
     res = mlx90614_set_sensor_test(&gs_handle, MLX90614_BOOL_TRUE);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set sensor test failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: enable sensor test.\n");
     res = mlx90614_get_sensor_test(&gs_handle, &enable);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get sensor test failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -868,19 +870,19 @@ uint8_t mlx90614_register_test(void)
     
     /* disable sensor test */
     res = mlx90614_set_sensor_test(&gs_handle, MLX90614_BOOL_FALSE);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set sensor test failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: disable sensor test.\n");
     res = mlx90614_get_sensor_test(&gs_handle, &enable);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get sensor test failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -891,19 +893,19 @@ uint8_t mlx90614_register_test(void)
     
     /* enable repeat sensor test */
     res = mlx90614_set_repeat_sensor_test(&gs_handle, MLX90614_BOOL_TRUE);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set repeat sensor test failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: enable repeat sensor test.\n");
     res = mlx90614_get_repeat_sensor_test(&gs_handle, &enable);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get repeat sensor test failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -911,19 +913,19 @@ uint8_t mlx90614_register_test(void)
     
     /* disable repeat sensor test */
     res = mlx90614_set_repeat_sensor_test(&gs_handle, MLX90614_BOOL_FALSE);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set repeat sensor test failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: disable repeat sensor test.\n");
     res = mlx90614_get_repeat_sensor_test(&gs_handle, &enable);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get repeat sensor test failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -934,19 +936,19 @@ uint8_t mlx90614_register_test(void)
     
     value = rand() % 65536;
     res = mlx90614_set_emissivity_correction_coefficient(&gs_handle, value);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set emissivity correction coefficient failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: set emissivity correction coefficient %d.\n", value);
     res = mlx90614_get_emissivity_correction_coefficient(&gs_handle, (uint16_t *)&value_check);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get emissivity correction coefficient failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -957,19 +959,19 @@ uint8_t mlx90614_register_test(void)
     
     s = (double)(rand() % 65536) / 65536.0;
     res = mlx90614_emissivity_correction_coefficient_convert_to_register(&gs_handle, s, (uint16_t *)&value);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: emissivity correction coefficient convert to register failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     mlx90614_interface_debug_print("mlx90614: %f convert to register 0x%02X.\n", s, value);
     res = mlx90614_emissivity_correction_coefficient_convert_to_data(&gs_handle, value, (double *)&s_check);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: emissivity correction coefficient convert to data failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -979,10 +981,10 @@ uint8_t mlx90614_register_test(void)
     mlx90614_interface_debug_print("mlx90614: mlx90614_get_id test.\n");
     
     res = mlx90614_get_id(&gs_handle, (uint16_t *)id);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get id failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -992,10 +994,10 @@ uint8_t mlx90614_register_test(void)
     mlx90614_interface_debug_print("mlx90614: mlx90614_enter_sleep_mode test.\n");
     
     res = mlx90614_enter_sleep_mode(&gs_handle);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: enter sleep mode failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -1005,10 +1007,10 @@ uint8_t mlx90614_register_test(void)
     mlx90614_interface_debug_print("mlx90614: mlx90614_exit_sleep_mode test.\n");
     
     res = mlx90614_exit_sleep_mode(&gs_handle);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: exit sleep mode failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -1018,10 +1020,10 @@ uint8_t mlx90614_register_test(void)
     mlx90614_interface_debug_print("mlx90614: mlx90614_get_flag test.\n");
     
     res = mlx90614_get_flag(&gs_handle, (uint16_t *)&flag);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: get flag failed.\n");
-        mlx90614_deinit(&gs_handle);
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -1029,7 +1031,7 @@ uint8_t mlx90614_register_test(void)
     
     /* finish register test */
     mlx90614_interface_debug_print("mlx90614: finish register test.\n");
-    mlx90614_deinit(&gs_handle);
+    (void)mlx90614_deinit(&gs_handle);
     
     return 0;
 }

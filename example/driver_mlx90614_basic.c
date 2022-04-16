@@ -47,8 +47,7 @@ static mlx90614_handle_t gs_handle;        /**< mlx90614 handle */
  */
 uint8_t mlx90614_basic_init(void)
 {
-    volatile uint8_t res, addr, lsb, msb;
-    volatile uint16_t reg;
+    uint8_t res;
     
     /* link interface function */
     DRIVER_MLX90614_LINK_INIT(&gs_handle, mlx90614_handle_t);
@@ -63,7 +62,7 @@ uint8_t mlx90614_basic_init(void)
     
     /* set address */
     res = mlx90614_set_addr(&gs_handle, MLX90614_ADDRESS_DEFAULT);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: set addr failed.\n");
         
@@ -72,7 +71,7 @@ uint8_t mlx90614_basic_init(void)
     
     /* mlx90614 init */
     res = mlx90614_init(&gs_handle);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: init failed.\n");
         
@@ -81,18 +80,20 @@ uint8_t mlx90614_basic_init(void)
     
     /* pwm to smbus */
     res = mlx90614_pwm_to_smbus(&gs_handle);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: pwm to smbus failed.\n");
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
     
     /* exit sleep mode */
     res = mlx90614_exit_sleep_mode(&gs_handle);
-    if (res)
+    if (res != 0)
     {
         mlx90614_interface_debug_print("mlx90614: exit sleep mode failed.\n");
+        (void)mlx90614_deinit(&gs_handle);
         
         return 1;
     }
@@ -109,14 +110,12 @@ uint8_t mlx90614_basic_init(void)
  */
 uint8_t mlx90614_basic_deinit(void)
 {
-    volatile uint8_t res;
+    uint8_t res;
     
     /* deinit */
     res = mlx90614_deinit(&gs_handle);
-    if (res)
+    if (res != 0)
     {
-        mlx90614_interface_debug_print("mlx90614: deinit failed.\n");
-        
         return 1;
     }
     else
@@ -136,24 +135,20 @@ uint8_t mlx90614_basic_deinit(void)
  */
 uint8_t mlx90614_basic_read(float *ambient, float *object)
 {
-    volatile uint8_t res;
-    volatile uint16_t raw;
+    uint8_t res;
+    uint16_t raw;
     
     /* read ambient */
     res = mlx90614_read_ambient(&gs_handle, (uint16_t *)&raw, ambient);
-    if (res)
+    if (res != 0)
     {
-        mlx90614_interface_debug_print("mlx90614: read ambient failed.\n");
-        
         return 1;
     }
     
     /* read object1 */
     res = mlx90614_read_object1(&gs_handle, (uint16_t *)&raw, object);
-    if (res)
+    if (res != 0)
     {
-        mlx90614_interface_debug_print("mlx90614: read object1 failed.\n");
-        
         return 1;
     }
     

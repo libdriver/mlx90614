@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['debug_5fprint_4',['debug_print',['../structmlx90614__handle__s.html#a75f9f50c23e87e9407f9ec4e34bb42f2',1,'mlx90614_handle_s']]],
+  ['debug_5fprint_4',['debug_print',['../structmlx90614__handle__s.html#a769d5b3a6c14790a0e126e8fe70b384b',1,'mlx90614_handle_s']]],
   ['delay_5fms_5',['delay_ms',['../structmlx90614__handle__s.html#a406c9433252b7366de417b7a60915c81',1,'mlx90614_handle_s']]],
   ['driver_5fmlx90614_2ec_6',['driver_mlx90614.c',['../driver__mlx90614_8c.html',1,'']]],
   ['driver_5fmlx90614_2eh_7',['driver_mlx90614.h',['../driver__mlx90614_8h.html',1,'']]],

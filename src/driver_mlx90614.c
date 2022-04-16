@@ -82,29 +82,30 @@
  * @return    crc
  * @note      none
  */
-static uint8_t _mlx90614_calculate_crc(uint8_t *addr, uint8_t len)
+static uint8_t a_mlx90614_calculate_crc(uint8_t *addr, uint8_t len)
 {
-    volatile uint8_t crc = 0;
+    uint8_t crc = 0;
   
-    while (len--) 
+    while (len != 0)                                        /* check the len */
     {
-        volatile uint8_t i;
-        volatile uint8_t in_byte = *addr++;
+        uint8_t i;
+        uint8_t in_byte = *addr++;
     
-        for (i = 8; i; i--)                                          /* 8 times */
+        for (i = 8; i != 0; i--)                            /* 8 times */
         {
-            volatile uint8_t carry = (crc ^ in_byte ) & 0x80;        /* set carry */
+            uint8_t carry = (crc ^ in_byte ) & 0x80;        /* set carry */
             
-            crc <<= 1;                                               /* left shift 1 */
-            if (carry)                                               /* check carry */
+            crc <<= 1;                                      /* left shift 1 */
+            if (carry != 0)                                 /* check carry */
             {
-                crc ^= 0x7;                                          /* xor 0x7 */
+                crc ^= 0x7;                                 /* xor 0x7 */
             }
-            in_byte <<= 1;                                           /* left shift 1 */
-    }
+            in_byte <<= 1;                                  /* left shift 1 */
+        }
+        len--;                                              /* len-- */
   }
     
-  return crc;                                                        /* return crc */
+  return crc;                                               /* return crc */
 }
 
 
@@ -118,40 +119,43 @@ static uint8_t _mlx90614_calculate_crc(uint8_t *addr, uint8_t len)
  *             - 1 read failed
  * @note       none
  */
-static uint8_t _mlx90614_read(mlx90614_handle_t *handle, uint8_t command, uint16_t *data)
+static uint8_t a_mlx90614_read(mlx90614_handle_t *handle, uint8_t command, uint16_t *data)
 {
-    volatile uint8_t pec;
-    volatile uint8_t arr[5];
-    volatile uint8_t buf[3];
-    volatile uint8_t times = 0x03;
+    uint8_t pec;
+    uint8_t arr[5];
+    uint8_t buf[3];
+    uint8_t times = 0x03;
     
-    repeat:
-    if (handle->iic_read(handle->iic_addr, command, (uint8_t *)buf, 3))        /* read data */
+    while (1)
     {
-        return 1;                                                              /* return error */
-    }
-    
-    arr[0] = handle->iic_addr;                                                 /* set read addr */
-    arr[1] = command;                                                          /* set command */ 
-    arr[2] = handle->iic_addr + 1;                                             /* set write addr */
-    arr[3] = buf[0];                                                           /* set buf 0 */
-    arr[4] = buf[1];                                                           /* set buf 1 */
-    pec = _mlx90614_calculate_crc((uint8_t *)arr, 5);                          /* calculate pec */
-    if ((pec != buf[2]) && (times != 0))                                       /* check */
-    {
-        times--;                                                               /* times-- */
-        handle->delay_ms(5);                                                   /* delay ms */
+        memset(buf, 0, sizeof(uint8_t) * 3);                                       /* clear the buffer */
+        if (handle->iic_read(handle->iic_addr, command, (uint8_t *)buf, 3) != 0)   /* read data */
+        {
+            return 1;                                                              /* return error */
+        }
         
-        goto repeat;                                                           /* goto repeat */
+        arr[0] = handle->iic_addr;                                                 /* set read addr */
+        arr[1] = command;                                                          /* set command */ 
+        arr[2] = handle->iic_addr + 1;                                             /* set write addr */
+        arr[3] = buf[0];                                                           /* set buf 0 */
+        arr[4] = buf[1];                                                           /* set buf 1 */
+        pec = a_mlx90614_calculate_crc((uint8_t *)arr, 5);                         /* calculate pec */
+        if ((pec != buf[2]) && (times != 0))                                       /* check */
+        {
+            times--;                                                               /* times-- */
+            handle->delay_ms(5);                                                   /* delay ms */
+            
+            continue;                                                              /* continue */
+        }
+        if (times == 0)                                                            /* timeout */
+        {
+            return 1;                                                              /* return error */
+        }
+        
+        *data = (uint16_t)(((uint16_t)buf[1] << 8) | buf[0]);                      /* get data */
+      
+        return 0;                                                                  /* success return 0 */
     }
-    if (times == 0)                                                            /* timeout */
-    {
-        return 1;                                                              /* return error */
-    }
-    
-    *data = ((uint16_t)buf[1] << 8) | buf[0];                                  /* get data */
-  
-    return 0;                                                                  /* success return 0 */
 }
 
 /**
@@ -164,15 +168,15 @@ static uint8_t _mlx90614_read(mlx90614_handle_t *handle, uint8_t command, uint16
  *            - 1 write failed
  * @note      none
  */
-static uint8_t _mlx90614_write(mlx90614_handle_t *handle, uint8_t command, uint16_t data)
+static uint8_t a_mlx90614_write(mlx90614_handle_t *handle, uint8_t command, uint16_t data)
 {
-    volatile uint8_t data_l;
-    volatile uint8_t data_h;
-    volatile uint8_t arr[4];
-    volatile uint8_t buf[3];
-    volatile uint8_t pec;
+    uint8_t data_l;
+    uint8_t data_h;
+    uint8_t arr[4];
+    uint8_t buf[3];
+    uint8_t pec;
     
-    if (command & 0x20)                                                                /* if eeprom */
+    if ((command & 0x20) != 0)                                                         /* if eeprom */
     {
         data_l = 0x00;                                                                 /* get lsb */
         data_h = 0x00;                                                                 /* get msb */
@@ -180,26 +184,26 @@ static uint8_t _mlx90614_write(mlx90614_handle_t *handle, uint8_t command, uint1
         arr[1] = command;                                                              /* set command */
         arr[2] = data_l;                                                               /* set lsb */
         arr[3] = data_h;                                                               /* set msb */
-        pec = _mlx90614_calculate_crc((uint8_t *)arr, 4);                              /* calculate pec */
+        pec = a_mlx90614_calculate_crc((uint8_t *)arr, 4);                             /* calculate pec */
         buf[0] = data_l;                                                               /* set lsb */
         buf[1] = data_h;                                                               /* set msb */
         buf[2] = pec;                                                                  /* set pec */
-        if (handle->iic_write(handle->iic_addr, command, (uint8_t *)buf, 3))           /* write command */
+        if (handle->iic_write(handle->iic_addr, command, (uint8_t *)buf, 3) != 0)      /* write command */
         {
             return 1;                                                                  /* return error */
         }
         handle->delay_ms(10);                                                          /* delay 10 ms */
-        data_l = data & 0xFF;                                                          /* get lsb */
-        data_h = (data & 0xFF00) >> 8;                                                 /* get msb */
+        data_l = (uint8_t)(data & 0xFF);                                               /* get lsb */
+        data_h = (uint8_t)((data & 0xFF00U) >> 8);                                     /* get msb */
         arr[0] = handle->iic_addr;                                                     /* set address */
         arr[1] = command;                                                              /* set command */
         arr[2] = data_l;                                                               /* set lsb */
         arr[3] = data_h;                                                               /* set msb */
-        pec = _mlx90614_calculate_crc((uint8_t *)arr, 4);                              /* calculate pec */
+        pec = a_mlx90614_calculate_crc((uint8_t *)arr, 4);                             /* calculate pec */
         buf[0] = data_l;                                                               /* set lsb */
         buf[1] = data_h;                                                               /* set msb */
         buf[2] = pec;                                                                  /* set pec */
-        if (handle->iic_write(handle->iic_addr, command, (uint8_t *)buf, 3))           /* write data */
+        if (handle->iic_write(handle->iic_addr, command, (uint8_t *)buf, 3) != 0)      /* write data */
         {
             return 1;                                                                  /* return error */
         }
@@ -209,18 +213,23 @@ static uint8_t _mlx90614_write(mlx90614_handle_t *handle, uint8_t command, uint1
     }
     else                                                                               /* ram */
     {
-        data_l = data & 0xFF;                                                          /* get lsb */
-        data_h = (data & 0xFF00) >> 8;                                                 /* get msb */
+        data_l = (uint8_t)(data & 0xFF);                                               /* get lsb */
+        data_h = (uint8_t)((data & 0xFF00U) >> 8);                                     /* get msb */
         arr[0] = handle->iic_addr;                                                     /* set address */
         arr[1] = command;                                                              /* set command */
         arr[2] = data_l;                                                               /* set lsb */
         arr[3] = data_h;                                                               /* set msb */
-        pec = _mlx90614_calculate_crc((uint8_t *)arr, 4);                              /* calculate pec */
+        pec = a_mlx90614_calculate_crc((uint8_t *)arr, 4);                             /* calculate pec */
         buf[0] = data_l;                                                               /* set lsb */
         buf[1] = data_h;                                                               /* set msb */
         buf[2] = pec;                                                                  /* set pec */
         
-        return handle->iic_write(handle->iic_addr, command, (uint8_t *)buf, 3);        /* write data */
+        if (handle->iic_write(handle->iic_addr, command, (uint8_t *)buf, 3) != 0)      /* write data */
+        {
+            return 1;                                                                  /* return error */
+        }
+        
+        return 0;                                                                      /* success return 0 */
     }
 }
 
@@ -279,8 +288,8 @@ uint8_t mlx90614_get_addr(mlx90614_handle_t *handle, uint8_t *addr)
  */
 uint8_t mlx90614_write_addr(mlx90614_handle_t *handle, uint8_t addr)
 {
-    volatile uint8_t res;
-    volatile uint16_t prev;
+    uint8_t res;
+    uint16_t prev;
     
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -292,16 +301,16 @@ uint8_t mlx90614_write_addr(mlx90614_handle_t *handle, uint8_t addr)
     }
     
     handle->iic_addr = 0x00;                                                             /* set 0x00 */
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_ADDRESS, (uint16_t *)&prev);        /* read eeprom address */
-    if (res)                                                                             /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_ADDRESS, (uint16_t *)&prev);       /* read eeprom address */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("mlx90614: read eeprom address failed.\n");                  /* read eeprom address failed */
         
         return 1;                                                                        /* return error */
     }
     prev |= addr;                                                                        /* set address */
-    res = _mlx90614_write(handle, MLX90614_REG_EERPOM_ADDRESS, prev);                    /* write eeprom address */
-    if (res)                                                                             /* check result */
+    res = a_mlx90614_write(handle, MLX90614_REG_EERPOM_ADDRESS, prev);                   /* write eeprom address */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("mlx90614: write eeprom address failed.\n");                 /* write eeprom address failed */
         
@@ -325,8 +334,8 @@ uint8_t mlx90614_write_addr(mlx90614_handle_t *handle, uint8_t addr)
  */
 uint8_t mlx90614_read_addr(mlx90614_handle_t *handle, uint8_t *addr)
 {
-    volatile uint8_t res;
-    volatile uint16_t prev;
+    uint8_t res;
+    uint16_t prev;
     
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -338,14 +347,14 @@ uint8_t mlx90614_read_addr(mlx90614_handle_t *handle, uint8_t *addr)
     }
     
     handle->iic_addr = 0x00;                                                             /* set 0x00 */
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_ADDRESS, (uint16_t *)&prev);        /* read eeprom address */
-    if (res)                                                                             /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_ADDRESS, (uint16_t *)&prev);       /* read eeprom address */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("mlx90614: read eeprom address failed.\n");                  /* read eeprom address failed */
         
         return 1;                                                                        /* return error */
     }
-    handle->iic_addr = (prev >> 0) & 0x0F;                                               /* set iic address */
+    handle->iic_addr = (uint8_t)((prev >> 0) & 0x0F);                                    /* set iic address */
     *addr = handle->iic_addr;                                                            /* get addr */
     
     return 0;                                                                            /* success return 0 */
@@ -364,8 +373,8 @@ uint8_t mlx90614_read_addr(mlx90614_handle_t *handle, uint8_t *addr)
  */
 uint8_t mlx90614_set_fir_length(mlx90614_handle_t *handle, mlx90614_fir_length_t len)
 {
-    volatile uint8_t res;
-    volatile uint16_t prev;
+    uint8_t res;
+    uint16_t prev;
     
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -376,8 +385,8 @@ uint8_t mlx90614_set_fir_length(mlx90614_handle_t *handle, mlx90614_fir_length_t
         return 3;                                                                        /* return error */
     }
     
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);        /* read config */
-    if (res)                                                                             /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);       /* read config */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("mlx90614: read config failed.\n");                          /* read config failed */
         
@@ -386,7 +395,7 @@ uint8_t mlx90614_set_fir_length(mlx90614_handle_t *handle, mlx90614_fir_length_t
     prev &= ~(0x07 << 8);                                                                /* clear config */
     prev |= len << 8;                                                                    /* set length */
     
-    return _mlx90614_write(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t )prev);        /* write config */
+    return a_mlx90614_write(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t )prev);       /* write config */
 }
 
 /**
@@ -402,8 +411,8 @@ uint8_t mlx90614_set_fir_length(mlx90614_handle_t *handle, mlx90614_fir_length_t
  */
 uint8_t mlx90614_get_fir_length(mlx90614_handle_t *handle, mlx90614_fir_length_t *len)
 {
-    volatile uint8_t res;
-    volatile uint16_t prev;
+    uint8_t res;
+    uint16_t prev;
     
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -414,8 +423,8 @@ uint8_t mlx90614_get_fir_length(mlx90614_handle_t *handle, mlx90614_fir_length_t
         return 3;                                                                        /* return error */
     }
     
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);        /* read config */
-    if (res)                                                                             /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);       /* read config */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("mlx90614: read config failed.\n");                          /* read config failed */
         
@@ -440,8 +449,8 @@ uint8_t mlx90614_get_fir_length(mlx90614_handle_t *handle, mlx90614_fir_length_t
  */
 uint8_t mlx90614_set_iir(mlx90614_handle_t *handle, mlx90614_iir_t iir)
 {
-    volatile uint8_t res;
-    volatile uint16_t prev;
+    uint8_t res;
+    uint16_t prev;
     
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -452,8 +461,8 @@ uint8_t mlx90614_set_iir(mlx90614_handle_t *handle, mlx90614_iir_t iir)
         return 3;                                                                        /* return error */
     }
     
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);        /* read config */
-    if (res)                                                                             /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);       /* read config */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("mlx90614: read config failed.\n");                          /* read config failed */
         
@@ -462,7 +471,7 @@ uint8_t mlx90614_set_iir(mlx90614_handle_t *handle, mlx90614_iir_t iir)
     prev &= ~0x07;                                                                       /* clear config */
     prev |= iir;                                                                         /* set param */
     
-    return _mlx90614_write(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t )prev);        /* wrtie config */
+    return a_mlx90614_write(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t )prev);       /* wrtie config */
 }
 
 /**
@@ -478,8 +487,8 @@ uint8_t mlx90614_set_iir(mlx90614_handle_t *handle, mlx90614_iir_t iir)
  */
 uint8_t mlx90614_get_iir(mlx90614_handle_t *handle, mlx90614_iir_t *iir)
 {
-    volatile uint8_t res;
-    volatile uint16_t prev;
+    uint8_t res;
+    uint16_t prev;
     
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -490,8 +499,8 @@ uint8_t mlx90614_get_iir(mlx90614_handle_t *handle, mlx90614_iir_t *iir)
         return 3;                                                                        /* return error */
     }
     
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);        /* read config */
-    if (res)                                                                             /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);       /* read config */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("mlx90614: read config failed.\n");                          /* read config failed */
         
@@ -516,8 +525,8 @@ uint8_t mlx90614_get_iir(mlx90614_handle_t *handle, mlx90614_iir_t *iir)
  */
 uint8_t mlx90614_set_mode(mlx90614_handle_t *handle, mlx90614_mode_t mode)
 {
-    volatile uint8_t res;
-    volatile uint16_t prev;
+    uint8_t res;
+    uint16_t prev;
     
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -528,8 +537,8 @@ uint8_t mlx90614_set_mode(mlx90614_handle_t *handle, mlx90614_mode_t mode)
         return 3;                                                                        /* return error */
     }
     
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);        /* read config */
-    if (res)                                                                             /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);       /* read config */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("mlx90614: read config failed.\n");                          /* read config failed */
         
@@ -538,7 +547,7 @@ uint8_t mlx90614_set_mode(mlx90614_handle_t *handle, mlx90614_mode_t mode)
     prev &= ~(0x03 << 4);                                                                /* clear config */
     prev |= mode << 4;                                                                   /* set param */
     
-    return _mlx90614_write(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t )prev);        /* wrtie config */
+    return a_mlx90614_write(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t )prev);       /* wrtie config */
 }
 
 /**
@@ -554,8 +563,8 @@ uint8_t mlx90614_set_mode(mlx90614_handle_t *handle, mlx90614_mode_t mode)
  */
 uint8_t mlx90614_get_mode(mlx90614_handle_t *handle, mlx90614_mode_t *mode)
 {
-    volatile uint8_t res;
-    volatile uint16_t prev;
+    uint8_t res;
+    uint16_t prev;
     
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -566,8 +575,8 @@ uint8_t mlx90614_get_mode(mlx90614_handle_t *handle, mlx90614_mode_t *mode)
         return 3;                                                                        /* return error */
     }
   
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);        /* read config */
-    if (res)                                                                             /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);       /* read config */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("mlx90614: read config failed.\n");                          /* read config failed */
         
@@ -592,8 +601,8 @@ uint8_t mlx90614_get_mode(mlx90614_handle_t *handle, mlx90614_mode_t *mode)
  */
 uint8_t mlx90614_set_ir_sensor(mlx90614_handle_t *handle, mlx90614_ir_sensor_t sensor)
 {
-    volatile uint8_t res;
-    volatile uint16_t prev;
+    uint8_t res;
+    uint16_t prev;
     
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -604,8 +613,8 @@ uint8_t mlx90614_set_ir_sensor(mlx90614_handle_t *handle, mlx90614_ir_sensor_t s
         return 3;                                                                        /* return error */
     }
     
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);        /* read config */
-    if (res)                                                                             /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);       /* read config */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("mlx90614: read config failed.\n");                          /* read config failed */
         
@@ -614,7 +623,7 @@ uint8_t mlx90614_set_ir_sensor(mlx90614_handle_t *handle, mlx90614_ir_sensor_t s
     prev &= ~(0x01 << 6);                                                                /* clear config */
     prev |= sensor << 6;                                                                 /* set param */
    
-    return _mlx90614_write(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t )prev);        /* wrtie config */
+    return a_mlx90614_write(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t )prev);       /* wrtie config */
 }
 
 /**
@@ -630,8 +639,8 @@ uint8_t mlx90614_set_ir_sensor(mlx90614_handle_t *handle, mlx90614_ir_sensor_t s
  */
 uint8_t mlx90614_get_ir_sensor(mlx90614_handle_t *handle, mlx90614_ir_sensor_t *sensor)
 {
-    volatile uint8_t res;
-    volatile uint16_t prev;
+    uint8_t res;
+    uint16_t prev;
     
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -642,8 +651,8 @@ uint8_t mlx90614_get_ir_sensor(mlx90614_handle_t *handle, mlx90614_ir_sensor_t *
         return 3;                                                                        /* return error */
     }
     
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);        /* read config */
-    if (res)                                                                             /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);       /* read config */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("mlx90614: read config failed.\n");                          /* return error */
         
@@ -668,8 +677,8 @@ uint8_t mlx90614_get_ir_sensor(mlx90614_handle_t *handle, mlx90614_ir_sensor_t *
  */
 uint8_t mlx90614_set_ks(mlx90614_handle_t *handle, mlx90614_ks_t ks)
 {
-    volatile uint8_t res;
-    volatile uint16_t prev;
+    uint8_t res;
+    uint16_t prev;
     
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -680,8 +689,8 @@ uint8_t mlx90614_set_ks(mlx90614_handle_t *handle, mlx90614_ks_t ks)
         return 3;                                                                        /* return error */
     }
     
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);        /* read config */
-    if (res)                                                                             /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);       /* read config */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("mlx90614: read config failed.\n");                          /* read config failed */
         
@@ -690,7 +699,7 @@ uint8_t mlx90614_set_ks(mlx90614_handle_t *handle, mlx90614_ks_t ks)
     prev &= ~(0x01 << 7);                                                                /* clear config */
     prev |= ks << 7;                                                                     /* set param */
     
-    return _mlx90614_write(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t )prev);        /* wrtie config */
+    return a_mlx90614_write(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t )prev);       /* wrtie config */
 }
 
 /**
@@ -706,8 +715,8 @@ uint8_t mlx90614_set_ks(mlx90614_handle_t *handle, mlx90614_ks_t ks)
  */
 uint8_t mlx90614_get_ks(mlx90614_handle_t *handle, mlx90614_ks_t *ks)
 {
-    volatile uint8_t res;
-    volatile uint16_t prev;
+    uint8_t res;
+    uint16_t prev;
     
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -718,8 +727,8 @@ uint8_t mlx90614_get_ks(mlx90614_handle_t *handle, mlx90614_ks_t *ks)
         return 3;                                                                        /* return error */
     }
   
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);        /* read config */
-    if (res)                                                                             /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);       /* read config */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("mlx90614: read config failed.\n");                          /* read config failed */
         
@@ -744,8 +753,8 @@ uint8_t mlx90614_get_ks(mlx90614_handle_t *handle, mlx90614_ks_t *ks)
  */
 uint8_t mlx90614_set_kt2(mlx90614_handle_t *handle, mlx90614_kt2_t kt2)
 {
-    volatile uint8_t res;
-    volatile uint16_t prev;
+    uint8_t res;
+    uint16_t prev;
     
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -756,8 +765,8 @@ uint8_t mlx90614_set_kt2(mlx90614_handle_t *handle, mlx90614_kt2_t kt2)
         return 3;                                                                        /* return error */
     }
     
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);        /* read config */
-    if (res)                                                                             /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);       /* read config */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("mlx90614: read config failed.\n");                          /* read config failed. */
         
@@ -766,7 +775,7 @@ uint8_t mlx90614_set_kt2(mlx90614_handle_t *handle, mlx90614_kt2_t kt2)
     prev &= ~(0x01 << 14);                                                               /* clear config */
     prev |= kt2 << 14;                                                                   /* set param */
     
-    return _mlx90614_write(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t )prev);        /* wrtie config */
+    return a_mlx90614_write(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t )prev);       /* wrtie config */
 }
 
 /**
@@ -782,8 +791,8 @@ uint8_t mlx90614_set_kt2(mlx90614_handle_t *handle, mlx90614_kt2_t kt2)
  */
 uint8_t mlx90614_get_kt2(mlx90614_handle_t *handle, mlx90614_kt2_t *kt2)
 {
-    volatile uint8_t res;
-    volatile uint16_t prev;
+    uint8_t res;
+    uint16_t prev;
     
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -794,8 +803,8 @@ uint8_t mlx90614_get_kt2(mlx90614_handle_t *handle, mlx90614_kt2_t *kt2)
         return 3;                                                                        /* return error */
     }
     
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);        /* read config */
-    if (res)                                                                             /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);       /* read config */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("mlx90614: read config failed.\n");                          /* read config failed */
         
@@ -820,8 +829,8 @@ uint8_t mlx90614_get_kt2(mlx90614_handle_t *handle, mlx90614_kt2_t *kt2)
  */
 uint8_t mlx90614_set_gain(mlx90614_handle_t *handle, mlx90614_gain_t gain)
 {
-    volatile uint8_t res;
-    volatile uint16_t prev;
+    uint8_t res;
+    uint16_t prev;
     
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -832,8 +841,8 @@ uint8_t mlx90614_set_gain(mlx90614_handle_t *handle, mlx90614_gain_t gain)
         return 3;                                                                        /* return error */
     }
     
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);        /* read config */
-    if (res)                                                                             /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);       /* read config */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("mlx90614: read config failed.\n");                          /* read config failed */
         
@@ -842,7 +851,7 @@ uint8_t mlx90614_set_gain(mlx90614_handle_t *handle, mlx90614_gain_t gain)
     prev &= ~(0x07 << 11);                                                               /* clear config */
     prev |= gain << 11;                                                                  /* set param */
     
-    return _mlx90614_write(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t )prev);        /* wrtie config */
+    return a_mlx90614_write(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t )prev);       /* wrtie config */
 }
 
 /**
@@ -858,8 +867,8 @@ uint8_t mlx90614_set_gain(mlx90614_handle_t *handle, mlx90614_gain_t gain)
  */
 uint8_t mlx90614_get_gain(mlx90614_handle_t *handle, mlx90614_gain_t *gain)
 {
-    volatile uint8_t res;
-    volatile uint16_t prev;
+    uint8_t res;
+    uint16_t prev;
     
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -870,8 +879,8 @@ uint8_t mlx90614_get_gain(mlx90614_handle_t *handle, mlx90614_gain_t *gain)
         return 3;                                                                        /* return error */
     }
     
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);        /* read config */
-    if (res)                                                                             /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);       /* read config */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("mlx90614: read config failed.\n");                          /* read config failed */
         
@@ -896,8 +905,8 @@ uint8_t mlx90614_get_gain(mlx90614_handle_t *handle, mlx90614_gain_t *gain)
  */
 uint8_t mlx90614_set_sensor_test(mlx90614_handle_t *handle, mlx90614_bool_t enable)
 {
-    volatile uint8_t res;
-    volatile uint16_t prev;
+    uint8_t res;
+    uint16_t prev;
     
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -908,8 +917,8 @@ uint8_t mlx90614_set_sensor_test(mlx90614_handle_t *handle, mlx90614_bool_t enab
         return 3;                                                                        /* return error */
     }
     
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);        /* read config */
-    if (res)                                                                             /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);       /* read config */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("mlx90614: read config failed.\n");                          /* read config failed */
         
@@ -918,7 +927,7 @@ uint8_t mlx90614_set_sensor_test(mlx90614_handle_t *handle, mlx90614_bool_t enab
     prev &= ~(0x01 << 15);                                                               /* clear config */
     prev |= enable << 15;                                                                /* set param */
     
-    return _mlx90614_write(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t )prev);        /* wrtie config */
+    return a_mlx90614_write(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t )prev);       /* wrtie config */
 }
 
 /**
@@ -934,8 +943,8 @@ uint8_t mlx90614_set_sensor_test(mlx90614_handle_t *handle, mlx90614_bool_t enab
  */
 uint8_t mlx90614_get_sensor_test(mlx90614_handle_t *handle, mlx90614_bool_t *enable)
 {
-    volatile uint8_t res;
-    volatile uint16_t prev;
+    uint8_t res;
+    uint16_t prev;
     
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -946,8 +955,8 @@ uint8_t mlx90614_get_sensor_test(mlx90614_handle_t *handle, mlx90614_bool_t *ena
         return 3;                                                                        /* return error */
     }
     
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);        /* read config */
-    if (res)                                                                             /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);       /* read config */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("mlx90614: read config failed.\n");                          /* read config failed */
         
@@ -972,8 +981,8 @@ uint8_t mlx90614_get_sensor_test(mlx90614_handle_t *handle, mlx90614_bool_t *ena
  */
 uint8_t mlx90614_set_repeat_sensor_test(mlx90614_handle_t *handle, mlx90614_bool_t enable)
 {
-    volatile uint8_t res;
-    volatile uint16_t prev;
+    uint8_t res;
+    uint16_t prev;
     
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -984,8 +993,8 @@ uint8_t mlx90614_set_repeat_sensor_test(mlx90614_handle_t *handle, mlx90614_bool
         return 3;                                                                        /* return error */
     }
     
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);        /* read config */
-    if (res)                                                                             /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);       /* read config */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("mlx90614: read config failed.\n");                          /* read config failed */
         
@@ -994,7 +1003,7 @@ uint8_t mlx90614_set_repeat_sensor_test(mlx90614_handle_t *handle, mlx90614_bool
     prev &= ~(0x01 << 3);                                                                /* clear config */
     prev |= enable << 3;                                                                 /* set param */
     
-    return _mlx90614_write(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t )prev);        /* wrtie config */
+    return a_mlx90614_write(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t )prev);       /* wrtie config */
 }
 
 /**
@@ -1010,8 +1019,8 @@ uint8_t mlx90614_set_repeat_sensor_test(mlx90614_handle_t *handle, mlx90614_bool
  */
 uint8_t mlx90614_get_repeat_sensor_test(mlx90614_handle_t *handle, mlx90614_bool_t *enable)
 {
-    volatile uint8_t res;
-    volatile uint16_t prev;
+    uint8_t res;
+    uint16_t prev;
     
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -1022,8 +1031,8 @@ uint8_t mlx90614_get_repeat_sensor_test(mlx90614_handle_t *handle, mlx90614_bool
         return 3;                                                                        /* return error */
     }
     
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);        /* read config */
-    if (res)                                                                             /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_CONFIG1, (uint16_t *)&prev);       /* read config */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("mlx90614: read config failed.\n");                          /* read config failed */
         
@@ -1057,7 +1066,7 @@ uint8_t mlx90614_set_emissivity_correction_coefficient(mlx90614_handle_t *handle
         return 3;                                                                 /* return error */
     }
     
-    return _mlx90614_write(handle, MLX90614_REG_EEPROM_EMISSIVITY, value);        /* wrtie config */
+    return a_mlx90614_write(handle, MLX90614_REG_EEPROM_EMISSIVITY, value);       /* wrtie config */
 }
 
 /**
@@ -1082,7 +1091,7 @@ uint8_t mlx90614_get_emissivity_correction_coefficient(mlx90614_handle_t *handle
         return 3;                                                                /* return error */
     }
     
-    return _mlx90614_read(handle, MLX90614_REG_EEPROM_EMISSIVITY, value);        /* wrtie config */
+    return a_mlx90614_read(handle, MLX90614_REG_EEPROM_EMISSIVITY, value);       /* wrtie config */
 }
 
 /**
@@ -1162,7 +1171,7 @@ uint8_t mlx90614_emissivity_correction_coefficient_convert_to_data(mlx90614_hand
  */
 uint8_t mlx90614_read_raw_ir_channel(mlx90614_handle_t *handle, uint16_t *channel_1, uint16_t *channel_2)
 {
-    volatile uint8_t res;
+    uint8_t res;
     
     if (handle == NULL)                                                                                 /* check handle */
     {
@@ -1173,15 +1182,15 @@ uint8_t mlx90614_read_raw_ir_channel(mlx90614_handle_t *handle, uint16_t *channe
          return 3;                                                                                      /* return error */
     }
     
-    res = _mlx90614_read(handle, MLX90614_REG_RAM_RAW_DATA_IR_CHANNEL_1, (uint16_t *)channel_1);        /* read data */
-    if (res)                                                                                            /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_RAM_RAW_DATA_IR_CHANNEL_1, (uint16_t *)channel_1);       /* read data */
+    if (res != 0)                                                                                       /* check result */
     {
         handle->debug_print("mlx90614: read raw channel 1 failed.\n");                                  /* read raw channel 1 failed */
         
         return 1;                                                                                       /* return error */
     }
-    res = _mlx90614_read(handle, MLX90614_REG_RAM_RAW_DATA_IR_CHANNEL_2, (uint16_t *)channel_2);        /* read data */
-    if (res)                                                                                            /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_RAM_RAW_DATA_IR_CHANNEL_2, (uint16_t *)channel_2);       /* read data */
+    if (res != 0)                                                                                       /* check result */
     {
         handle->debug_print("mlx90614: read raw channel 2 failed.\n");                                  /* read raw channel 2 failed */
         
@@ -1205,7 +1214,7 @@ uint8_t mlx90614_read_raw_ir_channel(mlx90614_handle_t *handle, uint16_t *channe
  */
 uint8_t mlx90614_read_ambient(mlx90614_handle_t *handle, uint16_t *raw, float *celsius)
 {
-    volatile uint8_t res;
+    uint8_t res;
     
     if (handle == NULL)                                                        /* check handle */
     {
@@ -1216,8 +1225,8 @@ uint8_t mlx90614_read_ambient(mlx90614_handle_t *handle, uint16_t *raw, float *c
          return 3;                                                             /* return error */
     }
     
-    res = _mlx90614_read(handle, MLX90614_REG_RAM_TA, (uint16_t *)raw);        /* read data */
-    if (res)                                                                   /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_RAM_TA, (uint16_t *)raw);       /* read data */
+    if (res != 0)                                                              /* check result */
     {
         handle->debug_print("mlx90614: read raw ta failed.\n");                /* read raw ta failed */
         
@@ -1243,7 +1252,7 @@ uint8_t mlx90614_read_ambient(mlx90614_handle_t *handle, uint16_t *raw, float *c
  */
 uint8_t mlx90614_read_object1(mlx90614_handle_t *handle, uint16_t *raw, float *celsius)
 {
-    volatile uint8_t res;
+    uint8_t res;
     
     if (handle == NULL)                                                           /* check handle */
     {
@@ -1254,14 +1263,14 @@ uint8_t mlx90614_read_object1(mlx90614_handle_t *handle, uint16_t *raw, float *c
          return 3;                                                                /* return error */
     }
     
-    res = _mlx90614_read(handle, MLX90614_REG_RAM_TOBJ1, (uint16_t *)raw);        /* read data */
-    if (res)                                                                      /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_RAM_TOBJ1, (uint16_t *)raw);       /* read data */
+    if (res != 0)                                                                 /* check result */
     {
         handle->debug_print("mlx90614: read ram tobj1 failed.\n");                /* read ram tobj1 failed. */
         
         return 1;                                                                 /* return error */
     }
-    if ((*raw) & 0x8000)                                                          /* check result */
+    if (((*raw) & 0x8000U) != 0)                                                  /* check result */
     {
         handle->debug_print("mlx90614: flag error.\n");                           /* flag error */
         
@@ -1287,7 +1296,7 @@ uint8_t mlx90614_read_object1(mlx90614_handle_t *handle, uint16_t *raw, float *c
  */
 uint8_t mlx90614_read_object2(mlx90614_handle_t *handle, uint16_t *raw, float *celsius)
 {
-    volatile uint8_t res;
+    uint8_t res;
     
     if (handle == NULL)                                                           /* check handle */
     {
@@ -1298,14 +1307,14 @@ uint8_t mlx90614_read_object2(mlx90614_handle_t *handle, uint16_t *raw, float *c
          return 3;                                                                /* return error */
     }
     
-    res = _mlx90614_read(handle, MLX90614_REG_RAM_TOBJ2, (uint16_t *)raw);        /* read data */
-    if (res)                                                                      /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_RAM_TOBJ2, (uint16_t *)raw);       /* read data */
+    if (res != 0)                                                                 /* check result */
     {
         handle->debug_print("mlx90614: read ram tobj2 failed.\n");                /* read ram tobj2 failed. */
         
         return 1;                                                                 /* return error */
     }
-    if ((*raw) & 0x8000)                                                          /* check result */
+    if (((*raw) & 0x8000U) != 0)                                                  /* check result */
     {
         handle->debug_print("mlx90614: flag error.\n");                           /* flag error */
         
@@ -1329,7 +1338,7 @@ uint8_t mlx90614_read_object2(mlx90614_handle_t *handle, uint16_t *raw, float *c
  */
 uint8_t mlx90614_get_id(mlx90614_handle_t *handle, uint16_t id[4])
 {
-    volatile uint8_t res;
+    uint8_t res;
     
     if (handle == NULL)                                                                      /* check handle */
     {
@@ -1340,29 +1349,29 @@ uint8_t mlx90614_get_id(mlx90614_handle_t *handle, uint16_t id[4])
          return 3;                                                                           /* return error */
     }
     
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_ID1_NUMBER, (uint16_t *)&id[0]);        /* read data */
-    if (res)                                                                                 /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_ID1_NUMBER, (uint16_t *)&id[0]);       /* read data */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("mlx90614: read id1 failed.\n");                                 /* read id1 failed */
         
         return 1;                                                                            /* return error */
     }
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_ID2_NUMBER, (uint16_t *)&id[1]);        /* read data */
-    if (res)                                                                                 /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_ID2_NUMBER, (uint16_t *)&id[1]);       /* read data */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("mlx90614: read id2 failed.\n");                                 /* read id2 failed */
         
         return 1;                                                                            /* return error */
     }
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_ID3_NUMBER, (uint16_t *)&id[2]);        /* read data */
-    if (res)                                                                                 /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_ID3_NUMBER, (uint16_t *)&id[2]);       /* read data */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("mlx90614: read id3 failed.\n");                                 /* read id3 failed */
         
         return 1;                                                                            /* return error */
     }
-    res = _mlx90614_read(handle, MLX90614_REG_EERPOM_ID4_NUMBER, (uint16_t *)&id[3]);        /* read data */
-    if (res)                                                                                 /* check result */
+    res = a_mlx90614_read(handle, MLX90614_REG_EERPOM_ID4_NUMBER, (uint16_t *)&id[3]);       /* read data */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("mlx90614: read id4 failed.\n");                                 /* read id4 failed */
         
@@ -1394,7 +1403,14 @@ uint8_t mlx90614_get_flag(mlx90614_handle_t *handle, uint16_t *flag)
          return 3;                                                                            /* return error */
     }
     
-    return handle->iic_read(handle->iic_addr, COMMAND_READ_FLAGS, (uint8_t *)flag, 1);        /* read config */
+    if (handle->iic_read(handle->iic_addr, COMMAND_READ_FLAGS, (uint8_t *)flag, 1) != 0)      /* read config */
+    {
+        return 1;                                                                             /* return error */
+    }
+    else
+    {
+        return 0;                                                                             /* success return 0 */
+    }
 }
 
 /**
@@ -1409,8 +1425,8 @@ uint8_t mlx90614_get_flag(mlx90614_handle_t *handle, uint16_t *flag)
  */
 uint8_t mlx90614_enter_sleep_mode(mlx90614_handle_t *handle)
 {
-    volatile uint8_t crc;
-    volatile uint8_t buf[2];
+    uint8_t crc;
+    uint8_t buf[2];
     
     if (handle == NULL)                                                                         /* check handle */
     {
@@ -1423,9 +1439,16 @@ uint8_t mlx90614_enter_sleep_mode(mlx90614_handle_t *handle)
     
     buf[0] = handle->iic_addr;                                                                  /* set iic address */
     buf[1] = COMMAND_ENTER_SLEEP;                                                               /* set command */
-    crc = _mlx90614_calculate_crc((uint8_t *)buf, 2);                                           /* set crc */
+    crc = a_mlx90614_calculate_crc((uint8_t *)buf, 2);                                          /* set crc */
     
-    return handle->iic_write(handle->iic_addr, COMMAND_ENTER_SLEEP, (uint8_t *)&crc, 1);        /* write config */
+    if (handle->iic_write(handle->iic_addr, COMMAND_ENTER_SLEEP, (uint8_t *)&crc, 1) != 0)      /* write config */
+    {
+        return 1;                                                                               /* return error */
+    }
+    else
+    {
+        return 0;                                                                               /* success return 0 */
+    }
 }
 
 /**
@@ -1440,7 +1463,7 @@ uint8_t mlx90614_enter_sleep_mode(mlx90614_handle_t *handle)
  */
 uint8_t mlx90614_pwm_to_smbus(mlx90614_handle_t *handle)
 {
-    volatile uint8_t res;
+    uint8_t res;
     
     if (handle == NULL)                                              /* check handle */
     {
@@ -1452,7 +1475,7 @@ uint8_t mlx90614_pwm_to_smbus(mlx90614_handle_t *handle)
     }
     
     res = handle->scl_write(0);                                      /* set scl low */
-    if (res)                                                         /* check result */
+    if (res != 0)                                                    /* check result */
     {
         handle->debug_print("mlx90614: write scl failed.\n");        /* write scl failed */
         
@@ -1460,7 +1483,7 @@ uint8_t mlx90614_pwm_to_smbus(mlx90614_handle_t *handle)
     }
     handle->delay_ms(5);                                             /* delay 5 ms */
     res = handle->scl_write(1);                                      /* set scl high */
-    if (res)                                                         /* check result */
+    if (res != 0)                                                    /* check result */
     {
         handle->debug_print("mlx90614: write scl failed.\n");        /* write scl failed */
         
@@ -1482,7 +1505,7 @@ uint8_t mlx90614_pwm_to_smbus(mlx90614_handle_t *handle)
  */
 uint8_t mlx90614_exit_sleep_mode(mlx90614_handle_t *handle)
 {
-    volatile uint8_t res;
+    uint8_t res;
     
     if (handle == NULL)                                              /* check handle */
     {
@@ -1494,14 +1517,14 @@ uint8_t mlx90614_exit_sleep_mode(mlx90614_handle_t *handle)
     }
     
     res = handle->scl_write(1);                                      /* write scl 1 */
-    if (res)                                                         /* check result */
+    if (res != 0)                                                    /* check result */
     {
         handle->debug_print("mlx90614: write scl failed.\n");        /* write scl failed */
         
         return 1;                                                    /* return error */
     }
     res = handle->sda_write(1);                                      /* write sda 1 */
-    if (res)                                                         /* check result */
+    if (res != 0)                                                    /* check result */
     {
         handle->debug_print("mlx90614: write sda failed.\n");        /* write sda failed */
         
@@ -1509,7 +1532,7 @@ uint8_t mlx90614_exit_sleep_mode(mlx90614_handle_t *handle)
     }
     handle->delay_ms(1);                                             /* delay 1 ms */
     res = handle->sda_write(0);                                      /* write sda 0 */
-    if (res)                                                         /* check result */
+    if (res != 0)                                                    /* check result */
     {
         handle->debug_print("mlx90614: write sda failed.\n");        /* write sda failed */
         
@@ -1517,7 +1540,7 @@ uint8_t mlx90614_exit_sleep_mode(mlx90614_handle_t *handle)
     }    
     handle->delay_ms(50);                                            /* delay 50 ms */
     res = handle->sda_write(1);                                      /* write sda 1 */
-    if (res)                                                         /* return error */
+    if (res != 0)                                                    /* return error */
     {
         handle->debug_print("mlx90614: write sda failed.\n");        /* write sda failed */
         
@@ -1591,7 +1614,7 @@ uint8_t mlx90614_init(mlx90614_handle_t *handle)
         return 3;                                                    /* return error */
     }
     
-    if (handle->iic_init())                                          /* iic init */
+    if (handle->iic_init() != 0)                                     /* iic init */
     {
         handle->debug_print("mlx90614: iic init failed.\n");         /* iic init failed */
         
@@ -1615,9 +1638,9 @@ uint8_t mlx90614_init(mlx90614_handle_t *handle)
  */
 uint8_t mlx90614_deinit(mlx90614_handle_t *handle)
 {
-    volatile uint8_t res;
-    volatile uint8_t crc;
-    volatile uint8_t buf[2];
+    uint8_t res;
+    uint8_t crc;
+    uint8_t buf[2];
     
     if (handle == NULL)                                                                        /* check handle */
     {
@@ -1630,16 +1653,16 @@ uint8_t mlx90614_deinit(mlx90614_handle_t *handle)
     
     buf[0] = handle->iic_addr;                                                                 /* set iic address */
     buf[1] = COMMAND_ENTER_SLEEP;                                                              /* set command */
-    crc = _mlx90614_calculate_crc((uint8_t *)buf, 2);                                          /* set crc */
+    crc = a_mlx90614_calculate_crc((uint8_t *)buf, 2);                                         /* set crc */
     res = handle->iic_write(handle->iic_addr, COMMAND_ENTER_SLEEP, (uint8_t *)&crc, 1);        /* write config */
-    if (res)                                                                                   /* check result */
+    if (res != 0)                                                                              /* check result */
     {
         handle->debug_print("mlx90614: power down failed.\n");                                 /* power down failed */
         
         return 4;                                                                              /* return error */
     }
     res = handle->iic_deinit();                                                                /* iic deinit */
-    if (res)                                                                                   /* check result */
+    if (res != 0)                                                                              /* check result */
     {
         handle->debug_print("mlx90614: iic deinit failed.\n");                                 /* iic deinit failed */
         
@@ -1673,7 +1696,7 @@ uint8_t mlx90614_set_reg(mlx90614_handle_t *handle, uint8_t reg, uint16_t data)
         return 3;                                     /* return error */
     }
   
-    return _mlx90614_write(handle, reg, data);        /* write data */
+    return a_mlx90614_write(handle, reg, data);       /* write data */
 }
 
 /**
@@ -1699,7 +1722,7 @@ uint8_t mlx90614_get_reg(mlx90614_handle_t *handle, uint8_t reg, uint16_t *data)
         return 3;                                     /* return error */
     }
   
-    return _mlx90614_read(handle, reg, data);        /* write data */
+    return a_mlx90614_read(handle, reg, data);        /* write data */
 }
 
 /**

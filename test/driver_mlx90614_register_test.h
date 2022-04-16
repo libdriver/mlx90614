@@ -34,8 +34,8 @@
  * </table>
  */
 
-#ifndef _DRIVER_MLX90614_REGISTER_TEST_H_
-#define _DRIVER_MLX90614_REGISTER_TEST_H_
+#ifndef DRIVER_MLX90614_REGISTER_TEST_H
+#define DRIVER_MLX90614_REGISTER_TEST_H
 
 #include "driver_mlx90614_interface.h"
 
