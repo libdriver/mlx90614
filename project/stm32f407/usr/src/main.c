@@ -178,8 +178,8 @@ uint8_t mlx90614(uint8_t argc, char **argv)
             {
                 if (strcmp("id", argv[3]) == 0)
                 {
-                    volatile uint8_t res;
-                    volatile uint16_t id[4];
+                    uint8_t res;
+                    uint16_t id[4];
                     
                     /* init */
                     res = mlx90614_advance_init();
@@ -205,8 +205,7 @@ uint8_t mlx90614(uint8_t argc, char **argv)
                 }
                 else if (strcmp("sleep", argv[3]) == 0)
                 {
-                    volatile uint8_t res;
-                    volatile uint16_t id[4];
+                    uint8_t res;
                     
                     /* init */
                     res = mlx90614_advance_init();
@@ -232,8 +231,7 @@ uint8_t mlx90614(uint8_t argc, char **argv)
                 }
                 else if (strcmp("wake", argv[3]) == 0)
                 {
-                    volatile uint8_t res;
-                    volatile uint16_t id[4];
+                    uint8_t res;
                     
                     /* init */
                     res = mlx90614_advance_init();
@@ -285,10 +283,10 @@ uint8_t mlx90614(uint8_t argc, char **argv)
             {
                 if (strcmp("read", argv[3]) == 0)
                 {
-                    volatile uint8_t res;
-                    volatile uint32_t i, times;
-                    volatile float ambient;
-                    volatile float object;
+                    uint8_t res;
+                    uint32_t i, times;
+                    float ambient;
+                    float object;
                     
                     /* init */
                     res = mlx90614_basic_init();
@@ -328,10 +326,10 @@ uint8_t mlx90614(uint8_t argc, char **argv)
             {
                 if (strcmp("read", argv[3]) == 0)
                 {
-                    volatile uint8_t res;
-                    volatile uint32_t i, times;
-                    volatile float ambient;
-                    volatile float object;
+                    uint8_t res;
+                    uint32_t i, times;
+                    float ambient;
+                    float object;
                     
                     /* init */
                     res = mlx90614_advance_init();
@@ -394,7 +392,7 @@ uint8_t mlx90614(uint8_t argc, char **argv)
  */
 int main(void)
 {
-    volatile uint8_t res;
+    uint8_t res;
     
     /* stm32f407 clock init and hal init */
     clock_init();

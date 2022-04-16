@@ -1,4 +1,4 @@
-[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
+[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md) | [日本語](/README_ja.md) | [Deutsch](/README_de.md) | [한국어](/README_ko.md)
 
 <div align=center>
 <img src="/doc/image/logo.png"/>
@@ -6,11 +6,11 @@
 
 ## LibDriver MLX90614 
 
-[![API](https://img.shields.io/badge/api-reference-blue)](https://www.libdriver.com/docs/mlx90614/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
+[![MISRA](https://img.shields.io/badge/misra-compliant-brightgreen.svg)](/misra/README.md) [![API](https://img.shields.io/badge/api-reference-blue.svg)](https://www.libdriver.com/docs/mlx90614/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
 
 邁來芯 MLX90614 是一款用於非接觸式溫度測量的紅外溫度計。 IR 敏感型熱電堆檢測器芯片和信號調節 ASIC 都集成在同一 TO-39 罐封裝中。 MLX90614 集成有低噪聲放大器、17 位 ADC 和強大的 DSP 單元，因此溫度計兼具高精度和高分辨率。該溫度計出廠前已經過校準，可通過數字 SMBus 輸出提供整個溫度範圍內的測量溫度（分辨率為 0.02°C）。用戶可以將數字輸出配置為脈寬調製 (PWM)。標準情況下，將 10 位 PWM 配置為以 0.14°C 的分辨率連續傳輸介於 -20 和 120°C 之間的測量溫度。
 
-LibDriver MLX90614 是LibDriver推出的MLX90614 全功能驅動，該驅動提供溫度讀取，ID讀取等功能。
+LibDriver MLX90614 是LibDriver推出的MLX90614 全功能驅動，該驅動提供溫度讀取，ID讀取等功能並且它符合MISRA標準。   
 
 ### 目錄
 
@@ -51,24 +51,26 @@ LibDriver MLX90614 是LibDriver推出的MLX90614 全功能驅動，該驅動提�
 #### example basic
 
 ```C
-volatile uint8_t res;
-volatile uint32_t i;
-volatile float ambient;
-volatile float object;
+uint8_t res;
+uint32_t i;
+float ambient;
+float object;
 
 /* init */
 res = mlx90614_basic_init();
-if (res)
+if (res != 0)
 {
     return 1;
 }
 
+...
+    
 for (i = 0; i < 3; i++)
 {
     res = mlx90614_basic_read((float *)&ambient, (float *)&object);
-    if (res)
+    if (res != 0)
     {
-        mlx90614_basic_deinit();
+        (void)mlx90614_basic_deinit();
 
         return 1;
     }
@@ -79,55 +81,66 @@ for (i = 0; i < 3; i++)
 
     /* delay 1000 ms */
     mlx90614_interface_delay_ms(1000);
+    
+    ...
+        
 }
 
-mlx90614_basic_deinit();
+...
+    
+(void)mlx90614_basic_deinit();
+
+return 0;
 ```
 
 #### example advance
 
 ```C
-volatile uint8_t res;
-volatile uint32_t i;
-volatile float ambient;
-volatile float object;
+uint8_t res;
+uint32_t i;
+float ambient;
+float object;
 
 /* init */
 res = mlx90614_advance_init();
-if (res)
+if (res != 0)
 {
     return 1;
 }
 
 /* exit sleep */
 res = mlx90614_advance_exit_sleep();
-if (res)
+if (res != 0)
 {
-    mlx90614_advance_deinit();
+    (void)mlx90614_advance_deinit();
 
     return 1;
 }
 
+...
+    
 /* delay 2000 ms */
 mlx90614_interface_delay_ms(2000);
 
 /* read id */
 res = mlx90614_advance_get_id((uint16_t *)id);
-if (res)
+if (res != 0)
 {
-    mlx90614_advance_deinit();
+    (void)mlx90614_advance_deinit();
 
     return 1;
 }
 
 mlx90614_interface_debug_print("mlx90614: get id is 0x%02X 0x%02X 0x%02X 0x%02X.\n", id[0], id[1], id[2], id[3]);
 
+...
+    
 for (i = 0; i < 3; i++)
 {
     res = mlx90614_advance_read((float *)&ambient, (float *)&object);
-    if (res)
+    if (res != 0)
     {
-        mlx90614_advance_deinit();
+        (void)mlx90614_advance_deinit();
 
         return 1;
     }
@@ -138,18 +151,24 @@ for (i = 0; i < 3; i++)
 
     /* delay 1000 ms */
     mlx90614_interface_delay_ms(1000);
+    
+    ...
 }
 
 /* enter sleep */
 res = mlx90614_advance_enter_sleep();
-if (res)
+if (res != 0)
 {
-    mlx90614_advance_deinit();
+    (void)mlx90614_advance_deinit();
 
     return 1;
 }
 
-mlx90614_advance_deinit();
+...
+    
+(void)mlx90614_advance_deinit();
+
+return 0;
 ```
 
 ### 文檔

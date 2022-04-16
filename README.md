@@ -1,4 +1,4 @@
-[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
+[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md) | [日本語](/README_ja.md) | [Deutsch](/README_de.md) | [한국어](/README_ko.md)
 
 <div align=center>
 <img src="/doc/image/logo.png"/>
@@ -6,11 +6,11 @@
 
 ## LibDriver MLX90614
 
-[![API](https://img.shields.io/badge/api-reference-blue)](https://www.libdriver.com/docs/mlx90614/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
+[![MISRA](https://img.shields.io/badge/misra-compliant-brightgreen.svg)](/misra/README.md) [![API](https://img.shields.io/badge/api-reference-blue.svg)](https://www.libdriver.com/docs/mlx90614/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
 
 The MLX90614 is an Infra Red thermometer for noncontact temperature measurements. Both the IR sensitive thermopile detector chip and the signal conditioning ASSP are integrated in the same TO-39 can.Thanks to its low noise amplifier, 17-bit ADC and powerful DSP unit, a high accuracy and resolution of the thermometer is achieved.The thermometer comes factory calibrated with a digital PWM and SMBus (System Management Bus) output.As a standard, the 10-bit PWM is configured to continuously transmit the measured temperature in range of -20…120˚C, with an output resolution of 0.14˚C.The factory default POR setting is SMBus. 
 
-LibDriver MLX90614 is the full function driver of MLX90614 launched by LibDriver. It provides temperature reading, id reading and other functions.
+LibDriver MLX90614 is the full function driver of MLX90614 launched by LibDriver. It provides temperature reading, id reading and other functions. LibDriver is MISRA compliant.
 
 ### Table of Contents
 
@@ -51,24 +51,26 @@ Add /src, /interface and /example to your project.
 #### example basic
 
 ```C
-volatile uint8_t res;
-volatile uint32_t i;
-volatile float ambient;
-volatile float object;
+uint8_t res;
+uint32_t i;
+float ambient;
+float object;
 
 /* init */
 res = mlx90614_basic_init();
-if (res)
+if (res != 0)
 {
     return 1;
 }
 
+...
+    
 for (i = 0; i < 3; i++)
 {
     res = mlx90614_basic_read((float *)&ambient, (float *)&object);
-    if (res)
+    if (res != 0)
     {
-        mlx90614_basic_deinit();
+        (void)mlx90614_basic_deinit();
 
         return 1;
     }
@@ -79,55 +81,66 @@ for (i = 0; i < 3; i++)
 
     /* delay 1000 ms */
     mlx90614_interface_delay_ms(1000);
+    
+    ...
+        
 }
 
-mlx90614_basic_deinit();
+...
+    
+(void)mlx90614_basic_deinit();
+
+return 0;
 ```
 
 #### example advance
 
 ```C
-volatile uint8_t res;
-volatile uint32_t i;
-volatile float ambient;
-volatile float object;
+uint8_t res;
+uint32_t i;
+float ambient;
+float object;
 
 /* init */
 res = mlx90614_advance_init();
-if (res)
+if (res != 0)
 {
     return 1;
 }
 
 /* exit sleep */
 res = mlx90614_advance_exit_sleep();
-if (res)
+if (res != 0)
 {
-    mlx90614_advance_deinit();
+    (void)mlx90614_advance_deinit();
 
     return 1;
 }
 
+...
+    
 /* delay 2000 ms */
 mlx90614_interface_delay_ms(2000);
 
 /* read id */
 res = mlx90614_advance_get_id((uint16_t *)id);
-if (res)
+if (res != 0)
 {
-    mlx90614_advance_deinit();
+    (void)mlx90614_advance_deinit();
 
     return 1;
 }
 
 mlx90614_interface_debug_print("mlx90614: get id is 0x%02X 0x%02X 0x%02X 0x%02X.\n", id[0], id[1], id[2], id[3]);
 
+...
+    
 for (i = 0; i < 3; i++)
 {
     res = mlx90614_advance_read((float *)&ambient, (float *)&object);
-    if (res)
+    if (res != 0)
     {
-        mlx90614_advance_deinit();
+        (void)mlx90614_advance_deinit();
 
         return 1;
     }
@@ -138,18 +151,24 @@ for (i = 0; i < 3; i++)
 
     /* delay 1000 ms */
     mlx90614_interface_delay_ms(1000);
+    
+    ...
 }
 
 /* enter sleep */
 res = mlx90614_advance_enter_sleep();
-if (res)
+if (res != 0)
 {
-    mlx90614_advance_deinit();
+    (void)mlx90614_advance_deinit();
 
     return 1;
 }
 
-mlx90614_advance_deinit();
+...
+    
+(void)mlx90614_advance_deinit();
+
+return 0;
 ```
 
 ### Document
