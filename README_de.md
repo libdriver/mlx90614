@@ -27,15 +27,15 @@ LibDriver MLX90614 ist der Treiber mit vollem Funktionsumfang von MLX90614, der 
 
 /src enthält LibDriver MLX90614-Quelldateien.
 
-/interface enthält die plattformunabhängige Vorlage LibDriver MLX90614 IIC。
+/interface enthält die plattformunabhängige Vorlage LibDriver MLX90614 IIC.
 
-/test enthält den Testcode des LibDriver MLX90614-Treibers und dieser Code kann die erforderliche Funktion des Chips einfach testen。
+/test enthält den Testcode des LibDriver MLX90614-Treibers und dieser Code kann die erforderliche Funktion des Chips einfach testen.
 
 /example enthält LibDriver MLX90614-Beispielcode.
 
 /doc enthält das LibDriver MLX90614-Offlinedokument.
 
-/Datenblatt enthält MLX90614-Datenblatt。
+/Datenblatt enthält MLX90614-Datenblatt.
 
 /project enthält den allgemeinen Beispielcode für Linux- und MCU-Entwicklungsboards. Alle Projekte verwenden das Shell-Skript, um den Treiber zu debuggen, und die detaillierten Anweisungen finden Sie in der README.md jedes Projekts.
 
