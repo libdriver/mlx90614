@@ -14,6 +14,15 @@ iic pin: SCL/SDA GPIO3/GPIO2
 make
 ```
 
+#### 2.2 configuration
+
+```shell
+sudo vim /boot/config.txt
+
+# add or change
+dtparam=i2c_arm=on,i2c_arm_baudrate=80000
+```
+
 ### 3. mlx90614
 
 #### 3.1 command Instruction
