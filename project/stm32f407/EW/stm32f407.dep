@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <fileVersion>5</fileVersion>
+    <fileChecksum>1752583</fileChecksum>
+    <configuration>
+        <name>Release</name>
+        <outputs>
+            <file>$PROJ_DIR$\..\interface\src\clock.c</file>
+            <file>$PROJ_DIR$\..\interface\src\delay.c</file>
+            <file>$PROJ_DIR$\..\interface\src\iic.c</file>
+            <file>$PROJ_DIR$\..\interface\src\uart.c</file>
+            <file>$PROJ_DIR$\..\..\..\test\driver_mlx90614_read_test.c</file>
+            <file>$PROJ_DIR$\..\..\..\example\driver_mlx90614_advance.c</file>
+            <file>$PROJ_DIR$\..\driver\src\stm32f407_driver_mlx90614_interface.c</file>
+            <file>$PROJ_DIR$\..\..\..\src\driver_mlx90614.c</file>
+            <file>$PROJ_DIR$\..\..\..\example\driver_mlx90614_basic.c</file>
+            <file>$PROJ_DIR$\..\..\..\test\driver_mlx90614_register_test.c</file>
+        </outputs>
+        <forcedrebuild>
+            <name>[REBUILD_ALL]</name>
+        </forcedrebuild>
+    </configuration>
+</project>
