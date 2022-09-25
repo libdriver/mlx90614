@@ -1,31 +1,89 @@
-### 1. chip
+### 1. Chip
 
-#### 1.1 chip info
+#### 1.1 Chip Info
 
-chip name : Raspberry Pi 4B
+chip name : Raspberry Pi 4B.
 
-iic pin: SCL/SDA GPIO3/GPIO2
+iic pin: SCL/SDA GPIO3/GPIO2.
 
-### 2. install
+### 2. Install
 
-#### 2.1 install info
+#### 2.1 Dependencies
+
+Install the necessary dependencies.
 
 ```shell
-make
+sudo apt-get install libgpiod-dev pkg-config cmake -y
 ```
-
-#### 2.2 configuration
+#### 2.2 Configuration
 
 ```shell
 sudo vim /boot/config.txt
 
 # add or change
 dtparam=i2c_arm=on,i2c_arm_baudrate=80000
+
+# reboot the device
+reboot
 ```
 
-### 3. mlx90614
+#### 2.3 Makefile
 
-#### 3.1 command Instruction
+Build the project.
+
+```shell
+make
+```
+
+Install the project and this is optional.
+
+```shell
+sudo make install
+```
+
+Uninstall the project and this is optional.
+
+```shell
+sudo make uninstall
+```
+
+#### 2.4 CMake
+
+Build the project.
+
+```shell
+mkdir build && cd build 
+cmake .. 
+make
+```
+
+Install the project and this is optional.
+
+```shell
+sudo make install
+```
+
+Uninstall the project and this is optional.
+
+```shell
+sudo make uninstall
+```
+
+Test the project and this is optional.
+
+```shell
+make test
+```
+
+Find the compiled library in CMake. 
+
+```cmake
+find_package(mlx90614 REQUIRED)
+```
+
+### 3. MLX90614
+
+#### 3.1 Command Instruction
 
 ​          mlx90614 is a basic command which can test all mlx90614 driver function:
 
@@ -53,7 +111,7 @@ dtparam=i2c_arm=on,i2c_arm_baudrate=80000
 
 ​          -c advance wake         run mlx90614 advance wake up function.
 
-#### 3.2 command example
+#### 3.2 Command Example
 
 ```shell
 ./mlx90614 -i
