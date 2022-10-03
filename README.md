@@ -28,15 +28,15 @@ LibDriver MLX90614 is the full function driver of MLX90614 launched by LibDriver
 
 /src includes LibDriver MLX90614 source files.
 
-/interface includes LibDriver MLX90614 IIC platform independent template。
+/interface includes LibDriver MLX90614 IIC platform independent template.
 
-/test includes LibDriver MLX90614 driver test code and this code can test the chip necessary function simply。
+/test includes LibDriver MLX90614 driver test code and this code can test the chip necessary function simply.
 
 /example includes LibDriver MLX90614 sample code.
 
 /doc includes LibDriver MLX90614 offline document.
 
-/datasheet includes MLX90614 datasheet。
+/datasheet includes MLX90614 datasheet.
 
 /project includes the common Linux and MCU development board sample code. All projects use the shell script to debug the driver and the detail instruction can be found in each project's README.md.
 
@@ -51,6 +51,8 @@ Add /src, /interface and /example to your project.
 #### example basic
 
 ```C
+#include "driver_mlx90614_basic.h"
+
 uint8_t res;
 uint32_t i;
 float ambient;
@@ -96,6 +98,8 @@ return 0;
 #### example advance
 
 ```C
+#include "driver_mlx90614_advance.h"
+
 uint8_t res;
 uint32_t i;
 float ambient;

@@ -51,6 +51,8 @@ LibDriver MLX90614는 LibDriver에서 출시한 MLX90614의 전체 기능 드라
 #### example basic
 
 ```C
+#include "driver_mlx90614_basic.h"
+
 uint8_t res;
 uint32_t i;
 float ambient;
@@ -96,6 +98,8 @@ return 0;
 #### example advance
 
 ```c
+#include "driver_mlx90614_advance.h"
+
 uint8_t res;
 uint32_t i;
 float ambient;

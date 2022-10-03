@@ -51,6 +51,8 @@ LibDriver MLX90614 是LibDriver推出的MLX90614 全功能驱动，该驱动提�
 #### example basic
 
 ```C
+#include "driver_mlx90614_basic.h"
+
 uint8_t res;
 uint32_t i;
 float ambient;
@@ -96,6 +98,8 @@ return 0;
 #### example advance
 
 ```C
+#include "driver_mlx90614_advance.h"
+
 uint8_t res;
 uint32_t i;
 float ambient;
