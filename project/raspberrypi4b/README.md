@@ -1,10 +1,10 @@
-### 1. Chip
+### 1. Board
 
-#### 1.1 Chip Info
+#### 1.1 Board Info
 
-chip name : Raspberry Pi 4B.
+Board Name: Raspberry Pi 4B.
 
-iic pin: SCL/SDA GPIO3/GPIO2.
+IIC Pin: SCL/SDA GPIO3/GPIO2.
 
 ### 2. Install
 
@@ -81,35 +81,77 @@ Find the compiled library in CMake.
 find_package(mlx90614 REQUIRED)
 ```
 
+#### 2.5 IIC Problem
+
+There is some unknown problem in the iic interface of mlx90614 on the raspberry board.One command may try many times to run successfully or run failed.
+
+#### 2.6 Command Problem
+
+Each command will sent a sleep command to the chip, but raspberry can't run wake up command, so you should power down and power on MLX90614 every time before your any new command.
+
 ### 3. MLX90614
 
 #### 3.1 Command Instruction
 
-​          mlx90614 is a basic command which can test all mlx90614 driver function:
+1. Show mlx90614 chip and driver information.
 
-​          -i        show mlx90614 chip and driver information.
+   ```shell
+   mlx90614 (-i | --information)
+   ```
 
-​          -h       show mlx90614 help.
+2. Show mlx90614 help.
 
-​          -p       show mlx90614 pin connections of the current board.
+   ```shell
+   mlx90614 (-h | --help)
+   ```
 
-​          -t (reg | read <times>)
+3. Show mlx90614 pin connections of the current board.
 
-​          -t reg        run mlx90614 register test.
+   ```shell
+   mlx90614 (-p | --port)
+   ```
 
-​          -t read <times>        run mlx90614 read test. times means test times. 
+4. Run mlx90614 register test.
 
-​          -c (basic read <times> | advance read <times> | advance id | advance sleep | advance wake)
+   ```shell
+   mlx90614 (-t reg | --test=reg)
+   ```
 
-​          -c basic read <times>          run mlx90614 basic read function. times means read times.
+5. Run mlx90614 read test, num means test times.
 
-​          -c advance read <times>          run mlx90614 advance read function. times means read times.  
+   ```shell
+   mlx90614 (-t read | --test=read) [--times=<num>]
+   ```
 
-​          -c advance id          run mlx90614 advance read id function.
+6. Run mlx90614 basic read function, num means read times.
 
-​          -c advance sleep          run mlx90614 advance sleep function.
+   ```shell
+   mlx90614 (-e read | --example=read) [--times=<num>]
+   ```
 
-​          -c advance wake         run mlx90614 advance wake up function.
+7. Run mlx90614 advance read function, num means read times.  
+
+   ```shell
+   mlx90614 (-e advance-read | --example=advance-read) [--times=<num>]
+   ```
+
+8. Run mlx90614 advance read id function.
+
+   ```shell
+   mlx90614 (-e advance-id | --example=advance-id)
+   ```
+
+9. Run mlx90614 advance sleep function.
+
+   ```shell
+   mlx90614 (-e advance-sleep | --example=advance-sleep)
+   ```
+
+10. Run mlx90614 advance wake up function.
+
+    ```shell
+    mlx90614 (-e advance-wake | --example=advance-wake)
+    ```
 
 #### 3.2 Command Example
 
@@ -251,7 +293,7 @@ mlx90614: finish register test.
 ```
 
 ```shell
-./mlx90614 -t read 2
+./mlx90614 -t read --times=2
 
 mlx90614: chip is Melexis MLX90614.
 mlx90614: manufacturer is Melexis.
@@ -437,7 +479,7 @@ mlx90614: finish read test.
 ```
 
 ```shell
-./mlx90614 -c basic read 3
+./mlx90614 -e read --times=3
 
 mlx90614: 1/3.
 mlx90614: ambient is 24.13C object is 22.67C.
@@ -448,7 +490,7 @@ mlx90614: ambient is 24.45C object is 19.37C.
 ```
 
 ```shell
-./mlx90614 -c advance read 3
+./mlx90614 -e advance-read --times=3
 
 mlx90614: 1/3.
 mlx90614: ambient is 25.17C object is 20.89C.
@@ -459,19 +501,19 @@ mlx90614: ambient is 25.27C object is 20.99C.
 ```
 
 ```shell
-./mlx90614 -c advance id
+./mlx90614 -e advance-id
 
 mlx90614: get id is 0x6001 0xEBA8 0x8213 0xE0D2.
 ```
 
 ```shell
-./mlx90614 -c advance sleep
+./mlx90614 -e advance-sleep
 
 mlx90614: enter sleep.
 ```
 
 ```shell
-./mlx90614 -c advance wake
+./mlx90614 -e advance-wake
 
 mlx90614: exit sleep.
 ```
@@ -479,25 +521,27 @@ mlx90614: exit sleep.
 ```shell
 ./mlx90614 -h
 
-mlx90614 -i
-	show mlx90614 chip and driver information.
-mlx90614 -h
-	show mlx90614 help.
-mlx90614 -p
-	show mlx90614 pin connections of the current board.
-mlx90614 -t reg
-	run mlx90614 register test.
-mlx90614 -t read <times>
-	run mlx90614 read test.times means test times.
-mlx90614 -c basic read <times>
-	run mlx90614 basic read function.times means read times.
-mlx90614 -c advance read <times>
-	run mlx90614 advance read function.times means read times.
-mlx90614 -c advance id
-	run mlx90614 advance read id function.
-mlx90614 -c advance sleep
-	run mlx90614 advance sleep function.
-mlx90614 -c advance wake
-	run mlx90614 advance wake up function.
+Usage:
+  mlx90614 (-i | --information)
+  mlx90614 (-h | --help)
+  mlx90614 (-p | --port)
+  mlx90614 (-t reg | --test=reg)
+  mlx90614 (-t read | --test=read) [--times=<num>]
+  mlx90614 (-e read | --example=read) [--times=<num>]
+  mlx90614 (-e advance-read | --example=advance-read) [--times=<num>]
+  mlx90614 (-e advance-id | --example=advance-id)
+  mlx90614 (-e advance-sleep | --example=advance-sleep)
+  mlx90614 (-e advance-wake | --example=advance-wake)
+
+Options:
+  -e <read | advance-read | advance-id | advance-sleep | advance-wake>, --example=
+     <read | advance-read | advance-id | advance-sleep | advance-wake>
+                       Run the driver example.
+  -h, --help           Show the help.
+  -i, --information    Show the chip information.
+  -p, --port           Display the pin connections of the current board.
+  -t <reg | read>, --test=<reg | read>
+                       Run the driver test.
+      --times=<num>    Set the running times.([default: 3])
 ```
 

@@ -549,7 +549,7 @@ Functions</h2></td></tr>
 <p>emissivity correction coefficient convert to data </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">reg</td><td>is the raw data </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">*s</td><td>points to a converted data buffer </td></tr>
   </table>
@@ -603,7 +603,7 @@ Functions</h2></td></tr>
 <p>convert the emissivity correction coefficient to the register raw data </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">s</td><td>is the emissivity correction coefficient </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">*reg</td><td>points to a register raw data buffer </td></tr>
   </table>
@@ -642,7 +642,7 @@ Functions</h2></td></tr>
 <p>enter to sleep mode </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
   </table>
   </dd>
 </dl>
@@ -678,7 +678,7 @@ Functions</h2></td></tr>
 <p>exit from sleep mode </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
   </table>
   </dd>
 </dl>
@@ -724,7 +724,7 @@ Functions</h2></td></tr>
 <p>get the emissivity correction coefficient </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">*value</td><td>points to a value buffer </td></tr>
   </table>
   </dd>
@@ -771,8 +771,8 @@ Functions</h2></td></tr>
 <p>get the ir sensor fir length </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*len</td><td>points to a fir length buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*len</td><td>points to an fir length buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -818,7 +818,7 @@ Functions</h2></td></tr>
 <p>get the flag </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">*flag</td><td>points to a flag buffer </td></tr>
   </table>
   </dd>
@@ -865,7 +865,7 @@ Functions</h2></td></tr>
 <p>get the gain param </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">*gain</td><td>points to a gain param buffer </td></tr>
   </table>
   </dd>
@@ -912,8 +912,8 @@ Functions</h2></td></tr>
 <p>get the chip id </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*id</td><td>points to a id buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*id</td><td>points to an id buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -959,8 +959,8 @@ Functions</h2></td></tr>
 <p>get the iir param </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*iir</td><td>points to a iir param buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*iir</td><td>points to an iir param buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -1006,8 +1006,8 @@ Functions</h2></td></tr>
 <p>get the ir sensor mode </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*sensor</td><td>points to a ir sensor mode buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*sensor</td><td>points to an ir sensor mode buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -1053,7 +1053,7 @@ Functions</h2></td></tr>
 <p>get the ks param </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">*ks</td><td>points to a ks param buffer </td></tr>
   </table>
   </dd>
@@ -1100,7 +1100,7 @@ Functions</h2></td></tr>
 <p>get the kt2 param </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">*kt2</td><td>points to a kt2 param buffer </td></tr>
   </table>
   </dd>
@@ -1147,7 +1147,7 @@ Functions</h2></td></tr>
 <p>get the mode </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">*mode</td><td>points to a chip mode buffer </td></tr>
   </table>
   </dd>
@@ -1194,7 +1194,7 @@ Functions</h2></td></tr>
 <p>get the repeat sensor test status </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">*enable</td><td>points to a bool value buffer </td></tr>
   </table>
   </dd>
@@ -1241,7 +1241,7 @@ Functions</h2></td></tr>
 <p>get the sensor test status </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">*enable</td><td>points to a bool value buffer </td></tr>
   </table>
   </dd>
@@ -1278,7 +1278,7 @@ Functions</h2></td></tr>
 <p>change pwm mode to smbus mode </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
   </table>
   </dd>
 </dl>
@@ -1324,7 +1324,7 @@ Functions</h2></td></tr>
 <p>set the emissivity correction coefficient </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>is the set value </td></tr>
   </table>
   </dd>
@@ -1371,7 +1371,7 @@ Functions</h2></td></tr>
 <p>set the ir sensor fir length </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">len</td><td>is the fir length </td></tr>
   </table>
   </dd>
@@ -1418,7 +1418,7 @@ Functions</h2></td></tr>
 <p>set the gain param </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">gain</td><td>is the gain param </td></tr>
   </table>
   </dd>
@@ -1465,7 +1465,7 @@ Functions</h2></td></tr>
 <p>set the iir param </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">iir</td><td>is the iir param </td></tr>
   </table>
   </dd>
@@ -1512,7 +1512,7 @@ Functions</h2></td></tr>
 <p>set the ir sensor mode </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">sensor</td><td>is the ir sensor mode </td></tr>
   </table>
   </dd>
@@ -1559,7 +1559,7 @@ Functions</h2></td></tr>
 <p>set the ks param </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ks</td><td>is the ks param </td></tr>
   </table>
   </dd>
@@ -1606,7 +1606,7 @@ Functions</h2></td></tr>
 <p>set the kt2 param </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">kt2</td><td>is the kt2 param </td></tr>
   </table>
   </dd>
@@ -1653,7 +1653,7 @@ Functions</h2></td></tr>
 <p>set the mode </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">mode</td><td>is the chip mode </td></tr>
   </table>
   </dd>
@@ -1700,7 +1700,7 @@ Functions</h2></td></tr>
 <p>enable or disable the repeat sensor test </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">enable</td><td>is a bool value </td></tr>
   </table>
   </dd>
@@ -1747,7 +1747,7 @@ Functions</h2></td></tr>
 <p>enable or disable the sensor test </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a mlx90614 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to an mlx90614 handle structure </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">enable</td><td>is a bool value </td></tr>
   </table>
   </dd>
