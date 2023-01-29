@@ -81,14 +81,6 @@ Find the compiled library in CMake.
 find_package(mlx90614 REQUIRED)
 ```
 
-#### 2.5 IIC Problem
-
-There is some unknown problem in the iic interface of mlx90614 on the raspberry board.One command may try many times to run successfully or run failed.
-
-#### 2.6 Command Problem
-
-Each command will sent a sleep command to the chip, but raspberry can't run wake up command, so you should power down and power on MLX90614 every time before your any new command.
-
 ### 3. MLX90614
 
 #### 3.1 Command Instruction
@@ -545,3 +537,8 @@ Options:
       --times=<num>    Set the running times.([default: 3])
 ```
 
+#### 3.3 Command Problem
+
+1. There is some unknown problem in the iic interface of mlx90614 on the raspberry board, one command may try many times to run successfully or run failed.
+
+2. Each command will sent a sleep command to the chip, but raspberry can't run wake up command, so you should power down and power on MLX90614 every time before your any new command.
