@@ -66,7 +66,7 @@ uint8_t mlx90614(uint8_t argc, char **argv)
         {"times", required_argument, NULL, 1},
         {NULL, 0, NULL, 0},
     };
-    char type[33] = "unknow";
+    char type[33] = "unknown";
     uint32_t times = 3;
     
     /* if no params */
@@ -445,7 +445,7 @@ int main(uint8_t argc, char **argv)
     }
     else
     {
-        mlx90614_interface_debug_print("mlx90614: unknow status code.\n");
+        mlx90614_interface_debug_print("mlx90614: unknown status code.\n");
     }
 
     return 0;
