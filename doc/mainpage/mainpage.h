@@ -1,6 +1,6 @@
 /**
  * @mainpage  LibDriver MLX90614
- * @brief     libdriver mlx90614 is a full function driver of mlx90614 and it can run in both MCU and Linux platform.
+ * @brief     LibDriver MLX90614 is a full function driver of MLX90614 and it can run in both MCU and Linux platform.
  * @version   1.0.0
  * @author    Shifeng Li
  *
