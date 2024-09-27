@@ -362,7 +362,6 @@ uint8_t mlx90614_init(mlx90614_handle_t *handle);
  *            - 1 iic deinit failed
  *            - 2 handle is NULL
  *            - 3 handle is not initialized
- *            - 4 power down failed
  * @note      none
  */
 uint8_t mlx90614_deinit(mlx90614_handle_t *handle);

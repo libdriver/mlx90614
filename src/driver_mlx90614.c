@@ -1633,14 +1633,11 @@ uint8_t mlx90614_init(mlx90614_handle_t *handle)
  *            - 1 iic deinit failed
  *            - 2 handle is NULL
  *            - 3 handle is not initialized
- *            - 4 power down failed
  * @note      none
  */
 uint8_t mlx90614_deinit(mlx90614_handle_t *handle)
 {
     uint8_t res;
-    uint8_t crc;
-    uint8_t buf[2];
     
     if (handle == NULL)                                                                        /* check handle */
     {
@@ -1651,16 +1648,6 @@ uint8_t mlx90614_deinit(mlx90614_handle_t *handle)
          return 3;                                                                             /* return error */
     }
     
-    buf[0] = handle->iic_addr;                                                                 /* set iic address */
-    buf[1] = COMMAND_ENTER_SLEEP;                                                              /* set command */
-    crc = a_mlx90614_calculate_crc((uint8_t *)buf, 2);                                         /* set crc */
-    res = handle->iic_write(handle->iic_addr, COMMAND_ENTER_SLEEP, (uint8_t *)&crc, 1);        /* write config */
-    if (res != 0)                                                                              /* check result */
-    {
-        handle->debug_print("mlx90614: power down failed.\n");                                 /* power down failed */
-        
-        return 4;                                                                              /* return error */
-    }
     res = handle->iic_deinit();                                                                /* iic deinit */
     if (res != 0)                                                                              /* check result */
     {
