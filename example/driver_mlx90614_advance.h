@@ -100,8 +100,8 @@ uint8_t mlx90614_advance_exit_sleep(void);
 
 /**
  * @brief     advance example read
- * @param[in] *ambient points to a ambient buffer
- * @param[in] *object points to a object buffer
+ * @param[in] *ambient pointer to a ambient buffer
+ * @param[in] *object pointer to a object buffer
  * @return    status code
  *            - 0 success
  *            - 1 read failed
@@ -111,7 +111,7 @@ uint8_t mlx90614_advance_read(float *ambient, float *object);
 
 /**
  * @brief     advance example get id
- * @param[in] *id points to a id buffer
+ * @param[in] *id pointer to a id buffer
  * @return    status code
  *            - 0 success
  *            - 1 get id failed

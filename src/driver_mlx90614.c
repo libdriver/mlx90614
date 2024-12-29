@@ -77,8 +77,8 @@
 
 /**
  * @brief     calculate the crc
- * @param[in] *addr points to a buffer address
- * @param[in] len is the buffer length
+ * @param[in] *addr pointer to a buffer address
+ * @param[in] len buffer length
  * @return    crc
  * @note      none
  */
@@ -111,9 +111,9 @@ static uint8_t a_mlx90614_calculate_crc(uint8_t *addr, uint8_t len)
 
 /**
  * @brief      read the data from the bus
- * @param[in]  *handle points to an mlx90614 handle structure
- * @param[in]  command is the sent command
- * @param[out] *data points to a data buffer
+ * @param[in]  *handle pointer to an mlx90614 handle structure
+ * @param[in]  command sent command
+ * @param[out] *data pointer to a data buffer
  * @return     status code
  *             - 0 success
  *             - 1 read failed
@@ -160,9 +160,9 @@ static uint8_t a_mlx90614_read(mlx90614_handle_t *handle, uint8_t command, uint1
 
 /**
  * @brief     write the data to the bus
- * @param[in] *handle points to an mlx90614 handle structure
- * @param[in] command is the sent command
- * @param[in] data is the sent data
+ * @param[in] *handle pointer to an mlx90614 handle structure
+ * @param[in] command sent command
+ * @param[in] data sent data
  * @return    status code
  *            - 0 success
  *            - 1 write failed
@@ -235,8 +235,8 @@ static uint8_t a_mlx90614_write(mlx90614_handle_t *handle, uint8_t command, uint
 
 /**
  * @brief     set the address
- * @param[in] *handle points to an mlx90614 handle structure
- * @param[in] addr is the iic address
+ * @param[in] *handle pointer to an mlx90614 handle structure
+ * @param[in] addr iic address
  * @return    status code
  *            - 0 success
  *            - 2 handle is NULL
@@ -256,8 +256,8 @@ uint8_t mlx90614_set_addr(mlx90614_handle_t *handle, uint8_t addr)
 
 /**
  * @brief      get the address
- * @param[in]  *handle points to an mlx90614 handle structure
- * @param[out] *addr point to an iic address buffer
+ * @param[in]  *handle pointer to an mlx90614 handle structure
+ * @param[out] *addr pointer to an iic address buffer
  * @return     status code
  *             - 0 success
  *             - 2 handle is NULL
@@ -277,8 +277,8 @@ uint8_t mlx90614_get_addr(mlx90614_handle_t *handle, uint8_t *addr)
 
 /**
  * @brief     write the address
- * @param[in] *handle points to an mlx90614 handle structure
- * @param[in] addr is the iic address
+ * @param[in] *handle pointer to an mlx90614 handle structure
+ * @param[in] addr iic address
  * @return    status code
  *            - 0 success
  *            - 1 write addr failed
@@ -323,8 +323,8 @@ uint8_t mlx90614_write_addr(mlx90614_handle_t *handle, uint8_t addr)
 
 /**
  * @brief      read the address
- * @param[in]  *handle points to an mlx90614 handle structure
- * @param[out] *addr points to an iic address buffer
+ * @param[in]  *handle pointer to an mlx90614 handle structure
+ * @param[out] *addr pointer to an iic address buffer
  * @return     status code
  *             - 0 success
  *             - 1 read addr failed
@@ -362,8 +362,8 @@ uint8_t mlx90614_read_addr(mlx90614_handle_t *handle, uint8_t *addr)
 
 /**
  * @brief     set the ir sensor fir length
- * @param[in] *handle points to an mlx90614 handle structure
- * @param[in] len is the fir length
+ * @param[in] *handle pointer to an mlx90614 handle structure
+ * @param[in] len fir length
  * @return    status code
  *            - 0 success
  *            - 1 set fir length failed
@@ -400,8 +400,8 @@ uint8_t mlx90614_set_fir_length(mlx90614_handle_t *handle, mlx90614_fir_length_t
 
 /**
  * @brief      get the ir sensor fir length
- * @param[in]  *handle points to an mlx90614 handle structure
- * @param[out] *len points to an fir length buffer
+ * @param[in]  *handle pointer to an mlx90614 handle structure
+ * @param[out] *len pointer to an fir length buffer
  * @return     status code
  *             - 0 success
  *             - 1 get fir length failed
@@ -438,8 +438,8 @@ uint8_t mlx90614_get_fir_length(mlx90614_handle_t *handle, mlx90614_fir_length_t
 
 /**
  * @brief     set the iir param
- * @param[in] *handle points to an mlx90614 handle structure
- * @param[in] iir is the iir param
+ * @param[in] *handle pointer to an mlx90614 handle structure
+ * @param[in] iir iir param
  * @return    status code
  *            - 0 success
  *            - 1 set fir failed
@@ -476,8 +476,8 @@ uint8_t mlx90614_set_iir(mlx90614_handle_t *handle, mlx90614_iir_t iir)
 
 /**
  * @brief      get the iir param
- * @param[in]  *handle points to an mlx90614 handle structure
- * @param[out] *iir points to an iir param buffer
+ * @param[in]  *handle pointer to an mlx90614 handle structure
+ * @param[out] *iir pointer to an iir param buffer
  * @return     status code
  *             - 0 success
  *             - 1 get fir failed
@@ -514,8 +514,8 @@ uint8_t mlx90614_get_iir(mlx90614_handle_t *handle, mlx90614_iir_t *iir)
 
 /**
  * @brief     set the mode
- * @param[in] *handle points to an mlx90614 handle structure
- * @param[in] mode is the chip mode
+ * @param[in] *handle pointer to an mlx90614 handle structure
+ * @param[in] mode chip mode
  * @return    status code
  *            - 0 success
  *            - 1 set mode failed
@@ -552,8 +552,8 @@ uint8_t mlx90614_set_mode(mlx90614_handle_t *handle, mlx90614_mode_t mode)
 
 /**
  * @brief      get the mode
- * @param[in]  *handle points to an mlx90614 handle structure
- * @param[out] *mode points to a chip mode buffer
+ * @param[in]  *handle pointer to an mlx90614 handle structure
+ * @param[out] *mode pointer to a chip mode buffer
  * @return     status code
  *             - 0 success
  *             - 1 get mode failed
@@ -590,8 +590,8 @@ uint8_t mlx90614_get_mode(mlx90614_handle_t *handle, mlx90614_mode_t *mode)
 
 /**
  * @brief     set the ir sensor mode
- * @param[in] *handle points to an mlx90614 handle structure
- * @param[in] sensor is the ir sensor mode
+ * @param[in] *handle pointer to an mlx90614 handle structure
+ * @param[in] sensor ir sensor mode
  * @return    status code
  *            - 0 success
  *            - 1 set ir sensor failed
@@ -628,8 +628,8 @@ uint8_t mlx90614_set_ir_sensor(mlx90614_handle_t *handle, mlx90614_ir_sensor_t s
 
 /**
  * @brief      get the ir sensor mode
- * @param[in]  *handle points to an mlx90614 handle structure
- * @param[out] *sensor points to an ir sensor mode buffer
+ * @param[in]  *handle pointer to an mlx90614 handle structure
+ * @param[out] *sensor pointer to an ir sensor mode buffer
  * @return     status code
  *             - 0 success
  *             - 1 get ir sensor failed
@@ -666,8 +666,8 @@ uint8_t mlx90614_get_ir_sensor(mlx90614_handle_t *handle, mlx90614_ir_sensor_t *
 
 /**
  * @brief     set the ks param
- * @param[in] *handle points to an mlx90614 handle structure
- * @param[in] ks is the ks param
+ * @param[in] *handle pointer to an mlx90614 handle structure
+ * @param[in] ks ks param
  * @return    status code
  *            - 0 success
  *            - 1 set ks failed
@@ -704,8 +704,8 @@ uint8_t mlx90614_set_ks(mlx90614_handle_t *handle, mlx90614_ks_t ks)
 
 /**
  * @brief      get the ks param
- * @param[in]  *handle points to an mlx90614 handle structure
- * @param[out] *ks points to a ks param buffer
+ * @param[in]  *handle pointer to an mlx90614 handle structure
+ * @param[out] *ks pointer to a ks param buffer
  * @return     status code
  *             - 0 success
  *             - 1 get ks failed
@@ -742,8 +742,8 @@ uint8_t mlx90614_get_ks(mlx90614_handle_t *handle, mlx90614_ks_t *ks)
 
 /**
  * @brief     set the kt2 param
- * @param[in] *handle points to an mlx90614 handle structure
- * @param[in] kt2 is the kt2 param
+ * @param[in] *handle pointer to an mlx90614 handle structure
+ * @param[in] kt2 kt2 param
  * @return    status code
  *            - 0 success
  *            - 1 set kt2 failed
@@ -780,8 +780,8 @@ uint8_t mlx90614_set_kt2(mlx90614_handle_t *handle, mlx90614_kt2_t kt2)
 
 /**
  * @brief      get the kt2 param
- * @param[in]  *handle points to an mlx90614 handle structure
- * @param[out] *kt2 points to a kt2 param buffer
+ * @param[in]  *handle pointer to an mlx90614 handle structure
+ * @param[out] *kt2 pointer to a kt2 param buffer
  * @return     status code
  *             - 0 success
  *             - 1 get kt2 failed
@@ -818,8 +818,8 @@ uint8_t mlx90614_get_kt2(mlx90614_handle_t *handle, mlx90614_kt2_t *kt2)
 
 /**
  * @brief     set the gain param
- * @param[in] *handle points to an mlx90614 handle structure
- * @param[in] gain is the gain param
+ * @param[in] *handle pointer to an mlx90614 handle structure
+ * @param[in] gain gain param
  * @return    status code
  *            - 0 success
  *            - 1 set gain failed
@@ -856,8 +856,8 @@ uint8_t mlx90614_set_gain(mlx90614_handle_t *handle, mlx90614_gain_t gain)
 
 /**
  * @brief      get the gain param
- * @param[in]  *handle points to an mlx90614 handle structure
- * @param[out] *gain points to a gain param buffer
+ * @param[in]  *handle pointer to an mlx90614 handle structure
+ * @param[out] *gain pointer to a gain param buffer
  * @return     status code
  *             - 0 success
  *             - 1 get gain failed
@@ -894,8 +894,8 @@ uint8_t mlx90614_get_gain(mlx90614_handle_t *handle, mlx90614_gain_t *gain)
 
 /**
  * @brief     enable or disable the sensor test
- * @param[in] *handle points to an mlx90614 handle structure
- * @param[in] enable is a bool value
+ * @param[in] *handle pointer to an mlx90614 handle structure
+ * @param[in] enable bool value
  * @return    status code
  *            - 0 success
  *            - 1 set sensor test failed
@@ -932,8 +932,8 @@ uint8_t mlx90614_set_sensor_test(mlx90614_handle_t *handle, mlx90614_bool_t enab
 
 /**
  * @brief      get the sensor test status
- * @param[in]  *handle points to an mlx90614 handle structure
- * @param[out] *enable points to a bool value buffer
+ * @param[in]  *handle pointer to an mlx90614 handle structure
+ * @param[out] *enable pointer to a bool value buffer
  * @return     status code
  *             - 0 success
  *             - 1 get sensor test failed
@@ -970,8 +970,8 @@ uint8_t mlx90614_get_sensor_test(mlx90614_handle_t *handle, mlx90614_bool_t *ena
 
 /**
  * @brief     enable or disable the repeat sensor test
- * @param[in] *handle points to an mlx90614 handle structure
- * @param[in] enable is a bool value
+ * @param[in] *handle pointer to an mlx90614 handle structure
+ * @param[in] enable bool value
  * @return    status code
  *            - 0 success
  *            - 1 set repeat sensor test failed
@@ -1008,8 +1008,8 @@ uint8_t mlx90614_set_repeat_sensor_test(mlx90614_handle_t *handle, mlx90614_bool
 
 /**
  * @brief      get the repeat sensor test status
- * @param[in]  *handle points to an mlx90614 handle structure
- * @param[out] *enable points to a bool value buffer
+ * @param[in]  *handle pointer to an mlx90614 handle structure
+ * @param[out] *enable pointer to a bool value buffer
  * @return     status code
  *             - 0 success
  *             - 1 get repeat sensor test failed
@@ -1046,8 +1046,8 @@ uint8_t mlx90614_get_repeat_sensor_test(mlx90614_handle_t *handle, mlx90614_bool
 
 /**
  * @brief     set the emissivity correction coefficient
- * @param[in] *handle points to an mlx90614 handle structure
- * @param[in] value is the set value
+ * @param[in] *handle pointer to an mlx90614 handle structure
+ * @param[in] value set value
  * @return    status code
  *            - 0 success
  *            - 1 set emissivity correction coefficient failed
@@ -1071,8 +1071,8 @@ uint8_t mlx90614_set_emissivity_correction_coefficient(mlx90614_handle_t *handle
 
 /**
  * @brief      get the emissivity correction coefficient
- * @param[in]  *handle points to an mlx90614 handle structure
- * @param[out] *value points to a value buffer
+ * @param[in]  *handle pointer to an mlx90614 handle structure
+ * @param[out] *value pointer to a value buffer
  * @return     status code
  *             - 0 success
  *             - 1 get emissivity correction coefficient failed
@@ -1096,9 +1096,9 @@ uint8_t mlx90614_get_emissivity_correction_coefficient(mlx90614_handle_t *handle
 
 /**
  * @brief      convert the emissivity correction coefficient to the register raw data
- * @param[in]  *handle points to an mlx90614 handle structure
- * @param[in]  s is the emissivity correction coefficient
- * @param[out] *reg points to a register raw data buffer
+ * @param[in]  *handle pointer to an mlx90614 handle structure
+ * @param[in]  s emissivity correction coefficient
+ * @param[out] *reg pointer to a register raw data buffer
  * @return     status code
  *             - 0 success
  *             - 1 emissivity correction coefficient convert to register failed
@@ -1131,9 +1131,9 @@ uint8_t mlx90614_emissivity_correction_coefficient_convert_to_register(mlx90614_
 
 /**
  * @brief      emissivity correction coefficient convert to data
- * @param[in]  *handle points to an mlx90614 handle structure
- * @param[in]  reg is the raw data
- * @param[out] *s points to a converted data buffer
+ * @param[in]  *handle pointer to an mlx90614 handle structure
+ * @param[in]  reg raw data
+ * @param[out] *s pointer to a converted data buffer
  * @return     status code
  *             - 0 success
  *             - 1 emissivity correction coefficient convert to data failed
@@ -1159,9 +1159,9 @@ uint8_t mlx90614_emissivity_correction_coefficient_convert_to_data(mlx90614_hand
 
 /**
  * @brief      read the ir channel raw data
- * @param[in]  *handle points to an mlx90614 handle structure
- * @param[out] *channel_1 points to a channel 1 raw data buffer
- * @param[out] *channel_2 points to a channel 2 raw data buffer
+ * @param[in]  *handle pointer to an mlx90614 handle structure
+ * @param[out] *channel_1 pointer to a channel 1 raw data buffer
+ * @param[out] *channel_2 pointer to a channel 2 raw data buffer
  * @return     status code
  *             - 0 success
  *             - 1 read raw ir channel failed
@@ -1202,9 +1202,9 @@ uint8_t mlx90614_read_raw_ir_channel(mlx90614_handle_t *handle, uint16_t *channe
 
 /**
  * @brief      read the ambient
- * @param[in]  *handle points to an mlx90614 handle structure
- * @param[out] *raw points to a raw data buffer
- * @param[out] *celsius points to a celsius data buffer
+ * @param[in]  *handle pointer to an mlx90614 handle structure
+ * @param[out] *raw pointer to a raw data buffer
+ * @param[out] *celsius pointer to a celsius data buffer
  * @return     status code
  *             - 0 success
  *             - 1 read ambient failed
@@ -1239,9 +1239,9 @@ uint8_t mlx90614_read_ambient(mlx90614_handle_t *handle, uint16_t *raw, float *c
 
 /**
  * @brief      read the object1
- * @param[in]  *handle points to an mlx90614 handle structure
- * @param[out] *raw points to a raw data buffer
- * @param[out] *celsius points to a celsius data buffer
+ * @param[in]  *handle pointer to an mlx90614 handle structure
+ * @param[out] *raw pointer to a raw data buffer
+ * @param[out] *celsius pointer to a celsius data buffer
  * @return     status code
  *             - 0 success
  *             - 1 read object1 failed
@@ -1283,9 +1283,9 @@ uint8_t mlx90614_read_object1(mlx90614_handle_t *handle, uint16_t *raw, float *c
 
 /**
  * @brief      read the object2
- * @param[in]  *handle points to an mlx90614 handle structure
- * @param[out] *raw points to a raw data buffer
- * @param[out] *celsius points to a celsius data buffer
+ * @param[in]  *handle pointer to an mlx90614 handle structure
+ * @param[out] *raw pointer to a raw data buffer
+ * @param[out] *celsius pointer to a celsius data buffer
  * @return     status code
  *             - 0 success
  *             - 1 read object2 failed
@@ -1327,8 +1327,8 @@ uint8_t mlx90614_read_object2(mlx90614_handle_t *handle, uint16_t *raw, float *c
 
 /**
  * @brief      get the chip id
- * @param[in]  *handle points to an mlx90614 handle structure
- * @param[out] *id points to an id buffer
+ * @param[in]  *handle pointer to an mlx90614 handle structure
+ * @param[out] *id pointer to an id buffer
  * @return     status code
  *             - 0 success
  *             - 1 get id failed
@@ -1383,8 +1383,8 @@ uint8_t mlx90614_get_id(mlx90614_handle_t *handle, uint16_t id[4])
 
 /**
  * @brief      get the flag
- * @param[in]  *handle points to an mlx90614 handle structure
- * @param[out] *flag points to a flag buffer
+ * @param[in]  *handle pointer to an mlx90614 handle structure
+ * @param[out] *flag pointer to a flag buffer
  * @return     status code
  *             - 0 success
  *             - 1 get flag failed
@@ -1415,7 +1415,7 @@ uint8_t mlx90614_get_flag(mlx90614_handle_t *handle, uint16_t *flag)
 
 /**
  * @brief     enter to sleep mode
- * @param[in] *handle points to an mlx90614 handle structure
+ * @param[in] *handle pointer to an mlx90614 handle structure
  * @return    status code
  *            - 0 success
  *            - 1 enter sleep mode failed
@@ -1453,7 +1453,7 @@ uint8_t mlx90614_enter_sleep_mode(mlx90614_handle_t *handle)
 
 /**
  * @brief     change pwm mode to smbus mode
- * @param[in] *handle points to an mlx90614 handle structure
+ * @param[in] *handle pointer to an mlx90614 handle structure
  * @return    status code
  *            - 0 success
  *            - 1 pwm to smbus failed
@@ -1495,7 +1495,7 @@ uint8_t mlx90614_pwm_to_smbus(mlx90614_handle_t *handle)
 
 /**
  * @brief     exit from sleep mode
- * @param[in] *handle points to an mlx90614 handle structure
+ * @param[in] *handle pointer to an mlx90614 handle structure
  * @return    status code
  *            - 0 success
  *            - 1 exit sleep mode failed
@@ -1553,7 +1553,7 @@ uint8_t mlx90614_exit_sleep_mode(mlx90614_handle_t *handle)
 
 /**
  * @brief     initialize the chip
- * @param[in] *handle points to an mlx90614 handle structure
+ * @param[in] *handle pointer to an mlx90614 handle structure
  * @return    status code
  *            - 0 success
  *            - 1 iic initialization failed
@@ -1627,7 +1627,7 @@ uint8_t mlx90614_init(mlx90614_handle_t *handle)
 
 /**
  * @brief     close the chip
- * @param[in] *handle points to an mlx90614 handle structure
+ * @param[in] *handle pointer to an mlx90614 handle structure
  * @return    status code
  *            - 0 success
  *            - 1 iic deinit failed
@@ -1662,9 +1662,9 @@ uint8_t mlx90614_deinit(mlx90614_handle_t *handle)
 
 /**
  * @brief     set the chip register
- * @param[in] *handle points to an mlx90614 handle structure
- * @param[in] reg is the iic register address
- * @param[in] data is the write data
+ * @param[in] *handle pointer to an mlx90614 handle structure
+ * @param[in] reg iic register address
+ * @param[in] data written data
  * @return    status code
  *            - 0 success
  *            - 1 write failed
@@ -1688,9 +1688,9 @@ uint8_t mlx90614_set_reg(mlx90614_handle_t *handle, uint8_t reg, uint16_t data)
 
 /**
  * @brief      get the chip register
- * @param[in]  *handle points to an mlx90614 handle structure
- * @param[in]  reg is the iic register address
- * @param[out] *data points to a data buffer
+ * @param[in]  *handle pointer to an mlx90614 handle structure
+ * @param[in]  reg iic register address
+ * @param[out] *data pointer to a data buffer
  * @return     status code
  *             - 0 success
  *             - 1 read failed
@@ -1714,7 +1714,7 @@ uint8_t mlx90614_get_reg(mlx90614_handle_t *handle, uint8_t reg, uint16_t *data)
 
 /**
  * @brief      get chip information
- * @param[out] *info points to an mlx90614 info structure
+ * @param[out] *info pointer to an mlx90614 info structure
  * @return     status code
  *             - 0 success
  *             - 2 handle is NULL

@@ -126,8 +126,8 @@ uint8_t mlx90614_basic_deinit(void)
 
 /**
  * @brief     basic example read
- * @param[in] *ambient points to a ambient buffer
- * @param[in] *object points to a object buffer
+ * @param[in] *ambient pointer to a ambient buffer
+ * @param[in] *object pointer to a object buffer
  * @return    status code
  *            - 0 success
  *            - 1 read failed
