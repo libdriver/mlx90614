@@ -10,7 +10,7 @@
 
 The MLX90614 is an Infra Red thermometer for noncontact temperature measurements. Both the IR sensitive thermopile detector chip and the signal conditioning ASSP are integrated in the same TO-39 can.Thanks to its low noise amplifier, 17-bit ADC and powerful DSP unit, a high accuracy and resolution of the thermometer is achieved.The thermometer comes factory calibrated with a digital PWM and SMBus (System Management Bus) output.As a standard, the 10-bit PWM is configured to continuously transmit the measured temperature in range of -20…120˚C, with an output resolution of 0.14˚C.The factory default POR setting is SMBus. 
 
-LibDriver MLX90614 is a full-featured driver of MLX90614 launched by LibDriver. It provides temperature reading, id reading and other functions. LibDriver is MISRA compliant.
+LibDriver MLX90614 is a full-featured driver for MLX90614, launched by LibDriver. It provides temperature reading, id reading and additional features. LibDriver is MISRA compliant.
 
 ### Table of Contents
 
