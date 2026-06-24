@@ -420,6 +420,7 @@ uint8_t mlx90614_read_raw_ir_channel(mlx90614_handle_t *handle, uint16_t *channe
  *             - 1 read ambient failed
  *             - 2 handle is NULL
  *             - 3 handle is not initialized
+ *             - 4 flag error
  * @note       none
  */
 uint8_t mlx90614_read_ambient(mlx90614_handle_t *handle, uint16_t *raw, float *celsius);

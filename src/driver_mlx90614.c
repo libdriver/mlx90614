@@ -308,7 +308,7 @@ uint8_t mlx90614_write_addr(mlx90614_handle_t *handle, uint8_t addr)
         
         return 1;                                                                        /* return error */
     }
-    prev |= addr;                                                                        /* set address */
+    prev = (prev & 0xFF80) | (addr & 0x7F);                                              /* set address */
     res = a_mlx90614_write(handle, MLX90614_REG_EEPROM_ADDRESS, prev);                   /* write eeprom address */
     if (res != 0)                                                                        /* check result */
     {
@@ -354,7 +354,7 @@ uint8_t mlx90614_read_addr(mlx90614_handle_t *handle, uint8_t *addr)
         
         return 1;                                                                        /* return error */
     }
-    handle->iic_addr = (uint8_t)((prev >> 0) & 0x0F);                                    /* set iic address */
+    handle->iic_addr = (uint8_t)((prev >> 0) & 0x7F);                                    /* set iic address */
     *addr = handle->iic_addr;                                                            /* get addr */
     
     return 0;                                                                            /* success return 0 */
@@ -1210,6 +1210,7 @@ uint8_t mlx90614_read_raw_ir_channel(mlx90614_handle_t *handle, uint16_t *channe
  *             - 1 read ambient failed
  *             - 2 handle is NULL
  *             - 3 handle is not initialized
+ *             - 4 flag error
  * @note       none
  */
 uint8_t mlx90614_read_ambient(mlx90614_handle_t *handle, uint16_t *raw, float *celsius)
@@ -1231,6 +1232,12 @@ uint8_t mlx90614_read_ambient(mlx90614_handle_t *handle, uint16_t *raw, float *c
         handle->debug_print("mlx90614: read raw ta failed.\n");                /* read raw ta failed */
         
         return 1;                                                              /* return error */
+    }
+    if (((*raw) & 0x8000U) != 0)                                               /* check result */
+    {
+        handle->debug_print("mlx90614: flag error.\n");                        /* flag error */
+        
+        return 4;                                                              /* return error */
     }
     *celsius = (float)(*raw) * 0.02f - 273.15f;                                /* get celsius */
     
@@ -1394,6 +1401,8 @@ uint8_t mlx90614_get_id(mlx90614_handle_t *handle, uint16_t id[4])
  */
 uint8_t mlx90614_get_flag(mlx90614_handle_t *handle, uint16_t *flag)
 {
+    uint8_t buf[2];
+    
     if (handle == NULL)                                                                       /* check handle */
     {
          return 2;                                                                            /* return error */
@@ -1403,12 +1412,14 @@ uint8_t mlx90614_get_flag(mlx90614_handle_t *handle, uint16_t *flag)
          return 3;                                                                            /* return error */
     }
     
-    if (handle->iic_read(handle->iic_addr, COMMAND_READ_FLAGS, (uint8_t *)flag, 1) != 0)      /* read config */
+    if (handle->iic_read(handle->iic_addr, COMMAND_READ_FLAGS, (uint8_t *)buf, 2) != 0)       /* read config */
     {
         return 1;                                                                             /* return error */
     }
     else
     {
+        *flag = (uint16_t)((uint16_t)buf[1]) << 8 | buf[0];                                   /* set flag */
+        
         return 0;                                                                             /* success return 0 */
     }
 }
