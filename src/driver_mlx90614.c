@@ -289,6 +289,7 @@ uint8_t mlx90614_get_addr(mlx90614_handle_t *handle, uint8_t *addr)
 uint8_t mlx90614_write_addr(mlx90614_handle_t *handle, uint8_t addr)
 {
     uint8_t res;
+    uint8_t cur;
     uint16_t prev;
     
     if (handle == NULL)                                                                  /* check handle */
@@ -300,23 +301,27 @@ uint8_t mlx90614_write_addr(mlx90614_handle_t *handle, uint8_t addr)
         return 3;                                                                        /* return error */
     }
     
-    handle->iic_addr = 0x00;                                                             /* set 0x00 */
+    cur = handle->iic_addr;                                                              /* save current address */
+    handle->iic_addr = 0x00;                                                             /* every device answers 0x00 */
     res = a_mlx90614_read(handle, MLX90614_REG_EEPROM_ADDRESS, (uint16_t *)&prev);       /* read eeprom address */
     if (res != 0)                                                                        /* check result */
     {
+        handle->iic_addr = cur;                                                          /* restore address */
         handle->debug_print("mlx90614: read eeprom address failed.\n");                  /* read eeprom address failed */
         
         return 1;                                                                        /* return error */
     }
-    prev = (prev & 0xFF80) | (addr & 0x7F);                                              /* set address */
+    
+    prev = (prev & 0xFF80) | (uint16_t)((addr >> 1) & 0x7F);                             /* set 7-bit address */
     res = a_mlx90614_write(handle, MLX90614_REG_EEPROM_ADDRESS, prev);                   /* write eeprom address */
     if (res != 0)                                                                        /* check result */
     {
+        handle->iic_addr = cur;                                                          /* restore address */
         handle->debug_print("mlx90614: write eeprom address failed.\n");                 /* write eeprom address failed */
         
         return 1;                                                                        /* return error */
     }
-    handle->iic_addr = addr;                                                             /* set address */
+    handle->iic_addr = addr;                                                             /* set 8-bit write address */
     
     return 0;                                                                            /* success return 0 */
 }
@@ -335,6 +340,7 @@ uint8_t mlx90614_write_addr(mlx90614_handle_t *handle, uint8_t addr)
 uint8_t mlx90614_read_addr(mlx90614_handle_t *handle, uint8_t *addr)
 {
     uint8_t res;
+    uint8_t cur;
     uint16_t prev;
     
     if (handle == NULL)                                                                  /* check handle */
@@ -346,15 +352,18 @@ uint8_t mlx90614_read_addr(mlx90614_handle_t *handle, uint8_t *addr)
         return 3;                                                                        /* return error */
     }
     
-    handle->iic_addr = 0x00;                                                             /* set 0x00 */
+    cur = handle->iic_addr;                                                              /* save current address */
+    handle->iic_addr = 0x00;                                                             /* every device answers 0x00 */
     res = a_mlx90614_read(handle, MLX90614_REG_EEPROM_ADDRESS, (uint16_t *)&prev);       /* read eeprom address */
     if (res != 0)                                                                        /* check result */
     {
+        handle->iic_addr = cur;                                                          /* restore address */
         handle->debug_print("mlx90614: read eeprom address failed.\n");                  /* read eeprom address failed */
         
         return 1;                                                                        /* return error */
     }
-    handle->iic_addr = (uint8_t)((prev >> 0) & 0x7F);                                    /* set iic address */
+    
+    handle->iic_addr = (uint8_t)((prev & 0x7F) << 1);                                    /* set iic address */
     *addr = handle->iic_addr;                                                            /* get addr */
     
     return 0;                                                                            /* success return 0 */
@@ -925,7 +934,7 @@ uint8_t mlx90614_set_sensor_test(mlx90614_handle_t *handle, mlx90614_bool_t enab
         return 1;                                                                        /* return error */
     }
     prev &= ~(0x01 << 15);                                                               /* clear config */
-    prev |= enable << 15;                                                                /* set param */
+    prev |= (!enable) << 15;                                                             /* set param */
     
     return a_mlx90614_write(handle, MLX90614_REG_EEPROM_CONFIG1, (uint16_t )prev);       /* write config */
 }
@@ -963,7 +972,7 @@ uint8_t mlx90614_get_sensor_test(mlx90614_handle_t *handle, mlx90614_bool_t *ena
         return 1;                                                                        /* return error */
     }
     prev &= 0x01 << 15;                                                                  /* get config */
-    *enable = (mlx90614_bool_t)(0x01 & (prev >> 15));                                    /* set param */
+    *enable = (mlx90614_bool_t)(!(0x01 & (prev >> 15)));                                 /* set param */
     
     return 0;                                                                            /* success return 0 */
 }
